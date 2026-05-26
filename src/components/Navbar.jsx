@@ -1,4 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
+import logo from '../assets/logo.png'
 
 export default function Navbar() {
   const location = useLocation()
@@ -15,8 +16,12 @@ export default function Navbar() {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-[#f9fafb] h-[50px] flex items-center justify-between px-5">
 
       {/* Logo */}
-      <Link to="/" className="text-[#0f6e56] font-bold text-lg">
-        GO-Heal
+      <Link to="/" className="flex items-center gap-2">
+        <img src={logo} alt="GO-Heal logo" className="w-7 h-7 object-contain" />
+        <div className="flex flex-col leading-tight">
+          <span className="text-[#0f6e56] font-bold text-[15px]">GO-Heal</span>
+          <span className="text-[#5dcaa5] text-[10px] tracking-wide">wellness tourism</span>
+        </div>
       </Link>
 
       {/* Nav Links */}

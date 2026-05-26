@@ -158,10 +158,10 @@ export default function Destinasi() {
             <div className="border border-[#d1d5db] rounded-xl p-5">
               <div className="flex items-center justify-between mb-3">
                 <h2 className="text-[#111827] text-[15px] font-medium">Galeri</h2>
-                <div className="flex gap-2">
-                  <span className="bg-[#0f6e56] text-white text-[10px] px-2 py-1 rounded-full">★ Resmi</span>
-                  <span className="border border-[#d1d5db] text-[#4b5563] text-[10px] px-2 py-1 rounded-full">👤 Pengunjung</span>
-                </div>
+                  <div className="flex gap-2">
+                    <span className="bg-[#e8f5f0] text-[#0f6e56] text-[10px] px-2 py-1 rounded-full">★ Resmi</span>
+                    <span className="border border-[#d1d5db] text-[#4b5563] text-[10px] px-2 py-1 rounded-full">👤 Pengunjung</span>
+                  </div>
               </div>
               <div className="grid grid-cols-3 gap-2 mb-3">
                 {gallery.map((item) => (
@@ -200,16 +200,16 @@ export default function Destinasi() {
                 </div>
                 <div className="flex flex-col gap-1.5 flex-1 justify-center">
                   {[
-                    { star: "5★", pct: 78, w: "78%" },
-                    { star: "4★", pct: 15, w: "15%" },
-                    { star: "3★", pct: 7, w: "7%" },
+                    { star: "5★", pct: 78, w: "78%", color: "#085041" },
+                    { star: "4★", pct: 15, w: "15%", color: "#0f6e56" },
+                    { star: "3★", pct: 7,  w: "7%",  color: "#5dcaa5" },
                   ].map((r) => (
                     <div key={r.star} className="flex items-center gap-2">
                       <span className="text-[11px] text-[#4b5563] w-5">{r.star}</span>
                       <div className="flex-1 bg-[#e5e7eb] rounded-full h-1.5">
                         <div
-                          className="bg-[#0f6e56] h-1.5 rounded-full"
-                          style={{ width: r.w }}
+                          className="h-1.5 rounded-full transition-all"
+                          style={{ width: r.w, backgroundColor: r.color }}
                         />
                       </div>
                       <span className="text-[11px] text-[#9ca3af] w-7">{r.pct}%</span>
@@ -245,24 +245,23 @@ export default function Destinasi() {
           <div className="w-[449px] shrink-0 flex flex-col gap-4">
 
             {/* Status Strip */}
-            <div className="border border-[#d1d5db] rounded-xl px-4 py-3 flex items-center gap-2">
-              <div className="w-2 h-2 bg-[#5dcaa5] rounded-full"></div>
-              <span className="text-[#4b5563] text-[13px]">
+            <div className="bg-[#e8f5f0] border border-[#5dcaa5] rounded-xl px-4 py-3 flex items-center gap-2">
+              <div className="w-2 h-2 bg-[#0f6e56] rounded-full"></div>
+              <span className="text-[#0f6e56] text-[13px]">
                 Tersedia untuk booking — 3 slot tersisa minggu ini
               </span>
             </div>
-
             {/* Booking Card */}
             <div className="border border-[#d1d5db] rounded-xl overflow-hidden">
               {/* Header */}
-              <div className="bg-[#f9fafb] px-4 py-3 flex items-center justify-between border-b border-[#d1d5db]">
+              <div className="bg-[#e8f5f0] px-4 py-3 flex items-center justify-between border-b border-[#5dcaa5]">
                 <div>
-                  <p className="text-[#111827] text-[14px] font-medium">Forest Bathing Dasar</p>
-                  <p className="text-[#9ca3af] text-[11px]">Paket terpopuler</p>
+                  <p className="text-[#0f6e56] text-[14px] font-medium">Forest Bathing Dasar</p>
+                  <p className="text-[#4B5563] text-[11px]">Paket terpopuler</p>
                 </div>
                 <div className="text-right">
                   <span className="text-[#0f6e56] text-[16px] font-medium">Rp185k</span>
-                  <span className="text-[#9ca3af] text-[11px]"> /orang</span>
+                  <span className="text-[#4B5563] text-[11px]"> /orang</span>
                 </div>
               </div>
               {/* Body */}
@@ -375,5 +374,6 @@ export default function Destinasi() {
         </div>
       </div>
     </div>
+      
   )
 }

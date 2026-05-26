@@ -87,66 +87,72 @@ export default function Trip() {
       <Navbar />
       <div className="pt-[50px]">
 
-        {/* ===== HERO ===== */}
-        <div className="px-7 py-7 border-b border-[#f3f4f6]">
-          <div className="flex items-start justify-between mb-1">
-            <div>
-              <span className="bg-[#e1f5ee] text-[#0f6e56] text-[11px] px-3 py-1 rounded-full">
-                Modul Trip
-              </span>
-              <h1 className="text-[#111827] text-[22px] font-normal mt-2">
-                Pilih paket wisata Anda
-              </h1>
-              <p className="text-[#9ca3af] text-[13px]">
-                Forest Healing Padusan · Lereng Gunung Welirang
-              </p>
-            </div>
-            {/* Stats */}
-            <div className="flex gap-3">
-              {[
-                { value: "18", label: "Paket aktif" },
-                { value: "3", label: "Slot tersisa hari ini" },
-                { value: "Rp185k", label: "Mulai dari" },
-              ].map((s) => (
-                <div
-                  key={s.label}
-                  className="border border-[#d1d5db] rounded-xl px-5 py-3 text-center min-w-[90px]"
-                >
-                  <p className="text-[#111827] text-[18px] font-medium">{s.value}</p>
-                  <p className="text-[#9ca3af] text-[11px]">{s.label}</p>
-                </div>
-              ))}
-            </div>
-          </div>
+{/* ===== HERO ===== */}
+<div className="px-7 pt-6 pb-0 border-b border-[#e5e7eb]">
 
-          {/* Filter Bar */}
-          <div className="flex items-center justify-between mt-5 bg-[#f9fafb] rounded-xl px-4 py-2.5">
-            <div className="flex gap-2">
-              {filterChips.map((chip) => (
-                <button
-                  key={chip}
-                  onClick={() => setActiveFilter(chip)}
-                  className={`text-[13px] px-4 py-1.5 rounded-lg transition ${
-                    activeFilter === chip
-                      ? "bg-[#0f6e56] text-white"
-                      : "text-[#4b5563] hover:bg-white hover:shadow-sm"
-                  }`}
-                >
-                  {chip}
-                </button>
-              ))}
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-[#4b5563] text-[13px]">Urutkan:</span>
-              <select className="border border-[#d1d5db] rounded-lg px-3 py-1.5 text-[13px] text-[#111827] focus:outline-none focus:border-[#0f6e56] bg-white">
-                <option>Terpopuler</option>
-                <option>Harga terendah</option>
-                <option>Rating tertinggi</option>
-              </select>
-            </div>
-          </div>
+  {/* Baris atas: judul + stats */}
+  <div className="flex items-start justify-between mb-5">
+
+    {/* Kiri: badge + judul + subtitle */}
+    <div className="flex flex-col gap-1.5">
+      <div className="border border-[#d1d5db] rounded-full px-3 py-1 w-fit">
+        <span className="text-[#4b5563] text-[11px]">Modul Trip</span>
+      </div>
+      <h1 className="text-[#111827] text-[22px] font-semibold mt-1">
+        Pilih paket wisata Anda
+      </h1>
+      <p className="text-[#9ca3af] text-[13px]">
+        Forest Healing Padusan · Lereng Gunung Welirang
+      </p>
+    </div>
+
+    {/* Kanan: 3 stat boxes */}
+    <div className="flex gap-3">
+      {[
+        { value: "18", label: "Paket aktif" },
+        { value: "3", label: "Slot tersisa hari ini" },
+        { value: "Rp185k", label: "Mulai dari" },
+      ].map((s) => (
+        <div
+          key={s.label}
+          className="border border-[#d1d5db] rounded-xl px-6 py-3 text-center min-w-[100px]"
+        >
+          <p className="text-[#111827] text-[20px] font-semibold">{s.value}</p>
+          <p className="text-[#9ca3af] text-[11px] mt-0.5">{s.label}</p>
         </div>
+      ))}
+    </div>
 
+  </div>
+
+  {/* Filter Bar */}
+  <div className="flex items-center justify-between bg-[#f9fafb] rounded-xl px-3 py-2 mb-4">
+    <div className="flex gap-1">
+      {filterChips.map((chip) => (
+        <button
+          key={chip}
+          onClick={() => setActiveFilter(chip)}
+          className={`text-[13px] px-4 py-1.5 rounded-lg transition ${
+            activeFilter === chip
+              ? "bg-[#0f6e56] text-white"
+              : "text-[#4b5563] hover:bg-white hover:shadow-sm"
+          }`}
+        >
+          {chip}
+        </button>
+      ))}
+    </div>
+    <div className="flex items-center gap-2">
+      <span className="text-[#4b5563] text-[13px]">Urutkan:</span>
+      <select className="border border-[#d1d5db] rounded-lg px-3 py-1.5 text-[13px] text-[#111827] focus:outline-none focus:border-[#0f6e56] bg-white">
+        <option>Terpopuler</option>
+        <option>Harga terendah</option>
+        <option>Rating tertinggi</option>
+      </select>
+    </div>
+  </div>
+
+</div>
         {/* ===== BODY ===== */}
         <div className="flex gap-0">
 
