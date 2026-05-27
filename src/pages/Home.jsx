@@ -4,6 +4,10 @@ import Destination from '../components/Destination'
 import ArticleCard from '../components/ArticleCard'
 import Footer from '../components/Footer'
 
+import articleForest from '../assets/article-img-forest Healing.png'
+import articleMental from '../assets/div.article-img-kesehatanMental.png'
+import articleFito from '../assets/div.article-img-pitonsida.png'
+
 const articles = [
   {
     id: 1,
@@ -11,7 +15,7 @@ const articles = [
     title: "Bagaimana 20 menit di hutan menurunkan kortisol hingga 15%",
     duration: "5 mnt",
     date: "12 Mei 2025",
-    image: "https://images.unsplash.com/photo-1448375240586-882707db888b?w=400",
+    image: articleForest,
   },
   {
     id: 2,
@@ -19,7 +23,7 @@ const articles = [
     title: "Fitonsida: senyawa tersembunyi di udara hutan pinus",
     duration: "7 mnt",
     date: "8 Mei 2025",
-    image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400",
+    image: articleFito,
   },
   {
     id: 3,
@@ -27,7 +31,7 @@ const articles = [
     title: "Meditasi di alam terbuka vs ruangan: apa bedanya bagi otak?",
     duration: "6 mnt",
     date: "3 Mei 2025",
-    emoji: "🧘",
+    image: articleMental,
   },
 ]
 

@@ -1,10 +1,12 @@
 import { useState } from 'react'
 import Navbar from '../components/Navbar'
-
+import tripForest from '../assets/trip-forestBathingDasar-div.pkg-img.png'
+import tripYoga from '../assets/trip-forest healing yoga-meditasi-div.pkg-img.png'
+import tripCamp from '../assets/trip-forestCamp-div.pkg-img.png'
 const packages = [
   {
     id: 1,
-    emoji: "🌲",
+    img: tripForest,
     duration: "3 jam",
     name: "Forest Bathing Dasar",
     badges: [
@@ -22,7 +24,7 @@ const packages = [
   },
   {
     id: 2,
-    emoji: "🧘",
+    img: tripYoga,
     duration: "5 jam",
     name: "Forest Yoga & Meditasi",
     badges: [
@@ -39,7 +41,7 @@ const packages = [
   },
   {
     id: 3,
-    emoji: "🏕️",
+    img: tripCamp,
     duration: "24 jam",
     name: "Overnight Forest Camp",
     badges: [
@@ -81,32 +83,34 @@ export default function Trip() {
   const toggleArr = (arr, setArr, val) => {
     setArr(arr.includes(val) ? arr.filter(v => v !== val) : [...arr, val])
   }
-
+  const [minHarga, setMinHarga] = useState(185)
+  const [maxHarga, setMaxHarga] = useState(500)
+  const [selected, setSelected] = useState(null)
   return (
     <div className="bg-white min-h-screen">
       <Navbar />
       <div className="pt-[50px]">
 
 {/* ===== HERO ===== */}
-<div className="px-7 pt-6 pb-0 border-b border-[#e5e7eb]">
+<div className="bg-[#085041] px-7 pt-6 pb-0">
 
   {/* Baris atas: judul + stats */}
   <div className="flex items-start justify-between mb-5">
 
-    {/* Kiri: badge + judul + subtitle */}
+    {/* Kiri */}
     <div className="flex flex-col gap-1.5">
-      <div className="border border-[#d1d5db] rounded-full px-3 py-1 w-fit">
-        <span className="text-[#4b5563] text-[11px]">Modul Trip</span>
+      <div className="border border-white/20 rounded-full px-3 py-1 w-fit">
+        <span className="text-white/80 text-[12px]">Modul Trip</span>
       </div>
-      <h1 className="text-[#111827] text-[22px] font-semibold mt-1">
+      <h1 className="text-white text-[22px] font-semibold mt-1">
         Pilih paket wisata Anda
       </h1>
-      <p className="text-[#9ca3af] text-[13px]">
+      <p className="text-white/60 text-[13px]">
         Forest Healing Padusan · Lereng Gunung Welirang
       </p>
     </div>
 
-    {/* Kanan: 3 stat boxes */}
+    {/* Kanan: stat boxes */}
     <div className="flex gap-3">
       {[
         { value: "18", label: "Paket aktif" },
@@ -115,10 +119,10 @@ export default function Trip() {
       ].map((s) => (
         <div
           key={s.label}
-          className="border border-[#d1d5db] rounded-xl px-6 py-3 text-center min-w-[100px]"
+          className="border border-white/20 rounded-xl px-6 py-3 text-center min-w-[100px]"
         >
-          <p className="text-[#111827] text-[20px] font-semibold">{s.value}</p>
-          <p className="text-[#9ca3af] text-[11px] mt-0.5">{s.label}</p>
+          <p className="text-white text-[20px] font-semibold">{s.value}</p>
+          <p className="text-white/60 text-[11px] mt-0.5">{s.label}</p>
         </div>
       ))}
     </div>
@@ -126,7 +130,7 @@ export default function Trip() {
   </div>
 
   {/* Filter Bar */}
-  <div className="flex items-center justify-between bg-[#f9fafb] rounded-xl px-3 py-2 mb-4">
+  <div className="flex items-center justify-between bg-[#0f6e56]/50 rounded-xl px-3 py-2 mb-4">
     <div className="flex gap-1">
       {filterChips.map((chip) => (
         <button
@@ -134,8 +138,8 @@ export default function Trip() {
           onClick={() => setActiveFilter(chip)}
           className={`text-[13px] px-4 py-1.5 rounded-lg transition ${
             activeFilter === chip
-              ? "bg-[#0f6e56] text-white"
-              : "text-[#4b5563] hover:bg-white hover:shadow-sm"
+              ? "bg-[#5dcaa5] text-[#085041] font-medium"
+              : "text-white/80 hover:bg-white/10"
           }`}
         >
           {chip}
@@ -143,8 +147,8 @@ export default function Trip() {
       ))}
     </div>
     <div className="flex items-center gap-2">
-      <span className="text-[#4b5563] text-[13px]">Urutkan:</span>
-      <select className="border border-[#d1d5db] rounded-lg px-3 py-1.5 text-[13px] text-[#111827] focus:outline-none focus:border-[#0f6e56] bg-white">
+      <span className="text-white/80 text-[13px]">Urutkan:</span>
+      <select className="border border-white/20 rounded-lg px-3 py-1.5 text-[13px] text-white bg-[#085041] focus:outline-none">
         <option>Terpopuler</option>
         <option>Harga terendah</option>
         <option>Rating tertinggi</option>
@@ -182,10 +186,54 @@ export default function Trip() {
             {/* Rentang Harga */}
             <div>
               <p className="text-[#9ca3af] text-[11px] uppercase tracking-wider mb-3">Rentang Harga</p>
-              <input type="range" min="100" max="600" defaultValue="350" className="w-full accent-[#0f6e56]" />
-              <div className="flex justify-between mt-1">
+
+              {/* Label nilai */}
+              <div className="flex justify-between mb-3">
+                <span className="text-[12px] text-[#0f6e56] font-medium">Rp{minHarga}k</span>
+                <span className="text-[12px] text-[#0f6e56] font-medium">Rp{maxHarga}k</span>
+              </div>
+
+              {/* Dual Slider */}
+              <div className="relative flex items-center" style={{ height: '20px' }}>
+                {/* Track abu */}
+                <div className="absolute w-full h-1.5 bg-[#e5e7eb] rounded-full" />
+                {/* Track hijau aktif */}
+                <div
+                  className="absolute h-1.5 bg-[#0f6e56] rounded-full"
+                  style={{
+                    left: `${((minHarga - 100) / 500) * 100}%`,
+                    right: `${100 - ((maxHarga - 100) / 500) * 100}%`,
+                  }}
+                />
+                {/* Input Min */}
+                <input
+                  type="range"
+                  min={100}
+                  max={600}
+                  value={minHarga}
+                  onChange={(e) => {
+                    const val = Number(e.target.value)
+                    if (val < maxHarga - 50) setMinHarga(val)
+                  }}
+                  className="thumb-min"
+                />
+                {/* Input Max */}
+                <input
+                  type="range"
+                  min={100}
+                  max={600}
+                  value={maxHarga}
+                  onChange={(e) => {
+                    const val = Number(e.target.value)
+                    if (val > minHarga + 50) setMaxHarga(val)
+                  }}
+                  className="thumb-max"
+                />
+              </div>
+
+              {/* Label batas */}
+              <div className="flex justify-between mt-2">
                 <span className="text-[11px] text-[#9ca3af]">Rp100k</span>
-                <span className="text-[11px] text-[#4b5563]">Rp185k – Rp500k</span>
                 <span className="text-[11px] text-[#9ca3af]">Rp600k</span>
               </div>
             </div>
@@ -261,12 +309,17 @@ export default function Trip() {
             {packages.map((pkg) => (
               <div
                 key={pkg.id}
-                className="border border-[#d1d5db] rounded-xl overflow-hidden flex mb-4 hover:shadow-md transition"
+                onClick={() => setSelected(pkg.id)}
+                className={`rounded-xl overflow-hidden flex mb-4 hover:shadow-md transition cursor-pointer border ${
+                  selected === pkg.id
+                    ? "border-[#5dcaa5] shadow-md"
+                    : "border-[#d1d5db]"
+                }`}
               >
                 {/* Foto kiri */}
-                <div className="w-[180px] shrink-0 bg-[#085041] flex flex-col items-center justify-between py-4">
-                  <span className="text-4xl">{pkg.emoji}</span>
-                  <span className="bg-black/30 text-white text-[12px] px-3 py-1 rounded-full">
+                <div className="w-[180px] shrink-0 overflow-hidden relative">
+                  <img src={pkg.img} alt={pkg.name} className="w-full h-full object-cover" />
+                  <span className="absolute bottom-3 left-3 bg-black/40 text-white text-[12px] px-3 py-1 rounded-full">
                     {pkg.duration}
                   </span>
                 </div>

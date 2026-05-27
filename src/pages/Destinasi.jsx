@@ -1,6 +1,16 @@
 import { useState } from 'react'
 import Navbar from '../components/Navbar'
-
+import destMain from '../assets/div.dest-hero-main.png'
+import destSide1 from '../assets/div.dest-hero-side.png'
+import destSide2 from '../assets/div.dest-hero-side2.png'
+import destSide3 from '../assets/div.dest-hero-side3.png'
+import gallery1 from '../assets/div.gallery-item.png'
+import gallery2 from '../assets/div.gallery-item2.png'
+import gallery3 from '../assets/div.gallery-item3.png'
+import gallery4 from '../assets/div.gallery-item4.png'
+import gallery5 from '../assets/div.gallery-item5.png'
+import vtour from '../assets/div.vtour-box.png'
+import gallery6 from '../assets/div.gallery-item6.png'
 const foto1 = "https://images.unsplash.com/photo-1448375240586-882707db888b?w=800"
 const foto2 = "https://images.unsplash.com/photo-1476231682828-37e571bc172f?w=400"
 const foto3 = "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400"
@@ -27,13 +37,14 @@ const reviews = [
   },
 ]
 
+
 const gallery = [
-  { id: 1, emoji: "🌲", badge: "★ Resmi" },
-  { id: 2, emoji: "🌿", badge: "★ Resmi" },
-  { id: 3, emoji: "🧘", badge: "👤 UGC" },
-  { id: 4, emoji: "🏕️", badge: "★ Resmi" },
-  { id: 5, emoji: "🌅", badge: "👤 UGC" },
-  { id: 6, label: "+34 foto" },
+  { id: 1, img: gallery1, badge: "★ Resmi" },
+  { id: 2, img: gallery2, badge: "★ Resmi" },
+  { id: 3, img: gallery3, badge: "👤 UGC" },
+  { id: 4, img: gallery4, badge: "★ Resmi" },
+  { id: 5, img: gallery5, badge: "👤 UGC" },
+  { id: 6, img: gallery6, label: "+34 foto" },
 ]
 
 export default function Destinasi() {
@@ -51,18 +62,17 @@ export default function Destinasi() {
         <div className="relative h-[280px] flex">
           {/* Foto utama kiri */}
           <div className="w-[59%] h-full overflow-hidden">
-            <img src={foto1} alt="main" className="w-full h-full object-cover" />
+            <img src={destMain} alt="main" className="w-full h-full object-cover" />
           </div>
-          {/* 3 foto kanan */}
           <div className="flex flex-1">
             <div className="flex-1 overflow-hidden">
-              <img src={foto2} alt="s1" className="w-full h-full object-cover" />
+              <img src={destSide1} alt="s1" className="w-full h-full object-cover" />
             </div>
             <div className="flex-1 overflow-hidden">
-              <img src={foto3} alt="s2" className="w-full h-full object-cover" />
+              <img src={destSide2} alt="s2" className="w-full h-full object-cover" />
             </div>
-            <div className="flex-1 overflow-hidden bg-[#085041] flex items-center justify-center">
-              <span className="text-4xl">🌅</span>
+            <div className="flex-1 overflow-hidden">
+              <img src={destSide3} alt="s3" className="w-full h-full object-cover" />
             </div>
           </div>
 
@@ -167,11 +177,14 @@ export default function Destinasi() {
                 {gallery.map((item) => (
                   <div
                     key={item.id}
-                    className="bg-[#085041] rounded-lg h-[72px] flex items-center justify-center relative overflow-hidden cursor-pointer hover:opacity-90 transition"
+                    className="rounded-lg h-[72px] overflow-hidden relative cursor-pointer hover:opacity-90 transition"
                   >
-                    {item.emoji && <span className="text-2xl">{item.emoji}</span>}
-                    {item.label && (
-                      <span className="text-white text-[13px] font-medium">{item.label}</span>
+                    {item.img ? (
+                      <img src={item.img} alt="" className="w-full h-full object-cover" />
+                    ) : (
+                      <div className="w-full h-full bg-[#085041] flex items-center justify-center">
+                        <span className="text-white text-[13px] font-medium">{item.label}</span>
+                      </div>
                     )}
                     {item.badge && (
                       <span className="absolute bottom-1 right-1 bg-black/40 text-white text-[9px] px-1.5 py-0.5 rounded-full">
@@ -254,14 +267,14 @@ export default function Destinasi() {
             {/* Booking Card */}
             <div className="border border-[#d1d5db] rounded-xl overflow-hidden">
               {/* Header */}
-              <div className="bg-[#e8f5f0] px-4 py-3 flex items-center justify-between border-b border-[#5dcaa5]">
+              <div className="bg-[#0f6e56] px-4 py-3 flex items-center justify-between border-b border-[#085041]">
                 <div>
-                  <p className="text-[#0f6e56] text-[14px] font-medium">Forest Bathing Dasar</p>
-                  <p className="text-[#4B5563] text-[11px]">Paket terpopuler</p>
+                  <p className="text-white text-[14px] font-medium">Forest Bathing Dasar</p>
+                  <p className="text-[#9fe1cb] text-[11px]">Paket terpopuler</p>
                 </div>
                 <div className="text-right">
-                  <span className="text-[#0f6e56] text-[16px] font-medium">Rp185k</span>
-                  <span className="text-[#4B5563] text-[11px]"> /orang</span>
+                  <span className="text-white text-[16px] font-medium">Rp185k</span>
+                  <span className="text-[#9fe1cb] text-[11px]"> /orang</span>
                 </div>
               </div>
               {/* Body */}

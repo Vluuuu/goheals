@@ -1,7 +1,7 @@
-const foto1 = "https://images.unsplash.com/photo-1476231682828-37e571bc172f?w=300"
-const foto2 = "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=300"
-const foto3 = "https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?w=300"
 
+import foto1 from '../assets/home-Rectangle 2.png'
+import foto2 from '../assets/home-Rectangle 3.png'
+import foto3 from '../assets/home-Rectangle 4.png'
 export default function Destination() {
   return (
     <section className="bg-[#085041] flex items-center gap-6 px-8 py-8">

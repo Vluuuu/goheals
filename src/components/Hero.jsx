@@ -1,3 +1,5 @@
+import heroBg from '../assets/hero.png'
+
 export default function Hero() {
   return (
     <section
@@ -6,14 +8,13 @@ export default function Hero() {
         background: 'linear-gradient(147deg, #085041 0%, #0f6e56 40%, #1d9e75 100%)',
       }}
     >
-      {/* Foto hutan kanan — ganti URL dengan foto asli kamu */}
+      {/* Foto hutan kanan */}
       <div className="absolute right-0 top-0 w-[55%] h-full">
         <img
-          src="https://images.unsplash.com/photo-1448375240586-882707db888b?w=800"
+          src={heroBg}
           alt="hutan"
           className="w-full h-full object-cover opacity-60"
         />
-        {/* Gradient overlay supaya teks kiri tetap terbaca */}
         <div
           className="absolute inset-0"
           style={{
