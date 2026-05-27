@@ -58,3 +58,11 @@ input[type='range']::-moz-range-thumb {
   box-shadow: 0 1px 3px rgba(0,0,0,0.3);
   cursor: pointer;
 }
+/* Horizontal scroll hide scrollbar */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

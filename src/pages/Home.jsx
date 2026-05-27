@@ -3,6 +3,7 @@ import Hero from '../components/Hero'
 import Destination from '../components/Destination'
 import ArticleCard from '../components/ArticleCard'
 import Footer from '../components/Footer'
+import { useScrollAnimation } from '../hooks/useScrollAnimation'
 
 import articleForest from '../assets/article-img-forest Healing.png'
 import articleMental from '../assets/div.article-img-kesehatanMental.png'
@@ -33,11 +34,73 @@ const articles = [
     date: "3 Mei 2025",
     image: articleMental,
   },
+  {
+    id: 4,
+    category: "Tips Wellness",
+    title: "5 latihan pernapasan yang bisa kamu lakukan di tengah hutan",
+    duration: "4 mnt",
+    date: "28 Apr 2025",
+    emoji: "🌬️",
+  },
+  {
+    id: 5,
+    category: "Forest Healing",
+    title: "Mengapa suara alam bisa mempercepat pemulihan stres?",
+    duration: "6 mnt",
+    date: "21 Apr 2025",
+    emoji: "🌿",
+  },
+  {
+    id: 6,
+    category: "Kesehatan Mental",
+    title: "Journaling di alam: cara sederhana melepas beban pikiran",
+    duration: "5 mnt",
+    date: "15 Apr 2025",
+    emoji: "📓",
+  },
+  {
+    id: 7,
+    category: "Tips Wellness",
+    title: "Panduan forest bathing untuk pemula: mulai dari mana?",
+    duration: "8 mnt",
+    date: "10 Apr 2025",
+    emoji: "🚶",
+  },
+  {
+    id: 8,
+    category: "Fitonsida",
+    title: "Pohon pinus vs bambu: mana yang lebih kaya fitonsida?",
+    duration: "5 mnt",
+    date: "5 Apr 2025",
+    emoji: "🌲",
+  },
 ]
 
 const filters = ["Semua", "Kesehatan Mental", "Forest Healing", "Fitonsida", "Tips Wellness"]
 
+// Komponen card dengan animasi staggered individual
+function AnimatedArticleCard({ article, index }) {
+  const { ref, visible } = useScrollAnimation(0.1)
+
+  return (
+    <div
+      ref={ref}
+      className="flex-shrink-0 w-[260px] transition-all duration-700 ease-out"
+      style={{
+        opacity: visible ? 1 : 0,
+        transform: visible ? 'translateY(0)' : 'translateY(36px)',
+        transitionDelay: `${index * 80}ms`,
+      }}
+    >
+      <ArticleCard {...article} />
+    </div>
+  )
+}
+
 export default function Home() {
+  const sectionHeader = useScrollAnimation(0.1)
+  const filtersAnim   = useScrollAnimation(0.1)
+
   return (
     <div className="bg-white">
       <Navbar />
@@ -47,13 +110,34 @@ export default function Home() {
 
         {/* Section Artikel */}
         <section className="bg-[#f9fafb] px-8 py-12 flex flex-col gap-4">
-          <p className="text-[#0f6e56] text-[11px] uppercase tracking-widest">
-            Edukasi
-          </p>
-          <h2 className="text-[#111827] text-[22px] font-normal -mt-2">
-            Artikel terbaru
-          </h2>
-          <div className="flex gap-2 flex-wrap">
+
+          {/* Header */}
+          <div
+            ref={sectionHeader.ref}
+            className="transition-all duration-700 ease-out"
+            style={{
+              opacity: sectionHeader.visible ? 1 : 0,
+              transform: sectionHeader.visible ? 'translateY(0)' : 'translateY(24px)',
+            }}
+          >
+            <p className="text-[#0f6e56] text-[11px] uppercase tracking-widest">
+              Edukasi
+            </p>
+            <h2 className="text-[#111827] text-[22px] font-normal mt-2">
+              Artikel terbaru
+            </h2>
+          </div>
+
+          {/* Filter chips */}
+          <div
+            ref={filtersAnim.ref}
+            className="flex gap-2 flex-wrap transition-all duration-700 ease-out"
+            style={{
+              opacity: filtersAnim.visible ? 1 : 0,
+              transform: filtersAnim.visible ? 'translateY(0)' : 'translateY(20px)',
+              transitionDelay: '100ms',
+            }}
+          >
             {filters.map((f, i) => (
               <button
                 key={f}
@@ -67,11 +151,14 @@ export default function Home() {
               </button>
             ))}
           </div>
-          <div className="grid grid-cols-3 gap-4 mt-2">
-            {articles.map((article) => (
-              <ArticleCard key={article.id} {...article} />
+
+          {/* Artikel cards — horizontal scroll + staggered animation */}
+          <div className="flex gap-4 mt-2 overflow-x-auto pb-2 scrollbar-hide">
+            {articles.map((article, index) => (
+              <AnimatedArticleCard key={article.id} article={article} index={index} />
             ))}
           </div>
+
         </section>
 
         <Footer />
