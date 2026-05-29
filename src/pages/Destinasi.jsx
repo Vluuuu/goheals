@@ -9,12 +9,7 @@ import gallery2 from '../assets/div.gallery-item2.png'
 import gallery3 from '../assets/div.gallery-item3.png'
 import gallery4 from '../assets/div.gallery-item4.png'
 import gallery5 from '../assets/div.gallery-item5.png'
-import vtour from '../assets/div.vtour-box.png'
 import gallery6 from '../assets/div.gallery-item6.png'
-const foto1 = "https://images.unsplash.com/photo-1448375240586-882707db888b?w=800"
-const foto2 = "https://images.unsplash.com/photo-1476231682828-37e571bc172f?w=400"
-const foto3 = "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400"
-const foto4 = "https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?w=400"
 
 const tabs = ["Profil", "Galeri", "Virtual Tour", "Paket Wisata", "Ulasan"]
 
@@ -37,7 +32,6 @@ const reviews = [
   },
 ]
 
-
 const gallery = [
   { id: 1, img: gallery1, badge: "★ Resmi" },
   { id: 2, img: gallery2, badge: "★ Resmi" },
@@ -59,12 +53,15 @@ export default function Destinasi() {
       <div className="pt-[50px]">
 
         {/* ===== HERO ===== */}
-        <div className="relative h-[280px] flex">
-          {/* Foto utama kiri */}
-          <div className="w-[59%] h-full overflow-hidden">
+        {/* Mobile: foto utama saja fullwidth, tinggi lebih pendek */}
+        {/* Desktop: 4 foto grid seperti semula */}
+        <div className="relative h-[220px] sm:h-[280px] flex">
+          {/* Foto utama */}
+          <div className="w-full sm:w-[59%] h-full overflow-hidden">
             <img src={destMain} alt="main" className="w-full h-full object-cover" />
           </div>
-          <div className="flex flex-1">
+          {/* 3 foto samping — sembunyi di mobile */}
+          <div className="hidden sm:flex flex-1">
             <div className="flex-1 overflow-hidden">
               <img src={destSide1} alt="s1" className="w-full h-full object-cover" />
             </div>
@@ -77,26 +74,27 @@ export default function Destinasi() {
           </div>
 
           {/* Overlay info bawah */}
-          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent px-7 pb-4 pt-10">
+          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent px-5 sm:px-7 pb-4 pt-10">
             <span className="bg-[#0f6e56] text-white text-[11px] px-3 py-1 rounded-full">
               Forest Healing
             </span>
-            <h1 className="text-white text-[22px] font-normal mt-1">
+            <h1 className="text-white text-[18px] sm:text-[22px] font-normal mt-1">
               Forest Healing Padusan
             </h1>
-            <p className="text-white/75 text-[13px]">
+            <p className="text-white/75 text-[12px] sm:text-[13px]">
               Lereng Gunung Welirang, Pacet, Mojokerto · 900 mdpl · ★ 4.8 (127 ulasan)
             </p>
           </div>
         </div>
 
         {/* ===== TABS ===== */}
-        <div className="border-b border-[#d1d5db] flex px-7">
+        {/* Scrollable horizontal di mobile */}
+        <div className="border-b border-[#d1d5db] flex overflow-x-auto scrollbar-hide px-4 sm:px-7">
           {tabs.map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`px-4 py-3 text-[13px] transition border-b-2 -mb-px ${
+              className={`flex-shrink-0 px-3 sm:px-4 py-3 text-[13px] transition border-b-2 -mb-px whitespace-nowrap ${
                 activeTab === tab
                   ? "border-[#0f6e56] text-[#0f6e56]"
                   : "border-transparent text-[#4b5563] hover:text-[#0f6e56]"
@@ -107,14 +105,16 @@ export default function Destinasi() {
           ))}
         </div>
 
-        {/* ===== BODY 2 KOLOM ===== */}
-        <div className="flex gap-6 px-7 py-6 max-w-[1280px]">
+        {/* ===== BODY ===== */}
+        {/* Mobile: kolom tunggal (sidebar turun ke bawah konten) */}
+        {/* Desktop: 2 kolom seperti semula */}
+        <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 px-4 sm:px-7 py-5 sm:py-6 max-w-[1280px]">
 
           {/* ===== KOLOM KIRI ===== */}
-          <div className="flex flex-col gap-4 flex-1">
+          <div className="flex flex-col gap-4 flex-1 min-w-0">
 
             {/* Tentang Destinasi */}
-            <div className="border border-[#d1d5db] rounded-xl p-5">
+            <div className="border border-[#d1d5db] rounded-xl p-4 sm:p-5">
               <h2 className="text-[#111827] text-[15px] font-medium mb-3 border-l-4 border-[#0f6e56] pl-2">
                 Tentang Destinasi
               </h2>
@@ -124,8 +124,7 @@ export default function Destinasi() {
                 mengandung fitonsida alami dari pepohonan pinus yang terbukti secara ilmiah
                 membantu menurunkan kadar kortisol dan memperkuat sistem imun.
               </p>
-              {/* Info Grid */}
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-3 sm:gap-4">
                 {[
                   { label: "Ketinggian", value: "900 mdpl" },
                   { label: "Luas area", value: "±12 hektare" },
@@ -141,11 +140,11 @@ export default function Destinasi() {
             </div>
 
             {/* Virtual Tour */}
-            <div className="border border-[#d1d5db] rounded-xl p-5">
+            <div className="border border-[#d1d5db] rounded-xl p-4 sm:p-5">
               <h2 className="text-[#111827] text-[15px] font-medium mb-3 border-l-4 border-[#0f6e56] pl-2">
                 Virtual Tour 360°
               </h2>
-              <div className="bg-[#085041] rounded-lg h-[164px] flex flex-col items-center justify-center gap-2 mb-3">
+              <div className="bg-[#085041] rounded-lg h-[150px] sm:h-[164px] flex flex-col items-center justify-center gap-2 mb-3">
                 <div className="w-11 h-11 bg-white/20 rounded-full flex items-center justify-center">
                   <span className="text-white text-xl">▶</span>
                 </div>
@@ -156,7 +155,7 @@ export default function Destinasi() {
                 {["📍 Titik masuk", "🌲 Jalur meditasi", "🏕️ Area camp"].map((btn) => (
                   <button
                     key={btn}
-                    className="border border-[#d1d5db] text-[#4b5563] text-[12px] py-1.5 rounded-lg hover:border-[#0f6e56] hover:text-[#0f6e56] transition"
+                    className="border border-[#d1d5db] text-[#4b5563] text-[11px] sm:text-[12px] py-1.5 rounded-lg hover:border-[#0f6e56] hover:text-[#0f6e56] transition"
                   >
                     {btn}
                   </button>
@@ -165,19 +164,20 @@ export default function Destinasi() {
             </div>
 
             {/* Galeri */}
-            <div className="border border-[#d1d5db] rounded-xl p-5">
+            <div className="border border-[#d1d5db] rounded-xl p-4 sm:p-5">
               <div className="flex items-center justify-between mb-3">
                 <h2 className="text-[#111827] text-[15px] font-medium">Galeri</h2>
-                  <div className="flex gap-2">
-                    <span className="bg-[#e8f5f0] text-[#0f6e56] text-[10px] px-2 py-1 rounded-full">★ Resmi</span>
-                    <span className="border border-[#d1d5db] text-[#4b5563] text-[10px] px-2 py-1 rounded-full">👤 Pengunjung</span>
-                  </div>
+                <div className="flex gap-2">
+                  <span className="bg-[#e8f5f0] text-[#0f6e56] text-[10px] px-2 py-1 rounded-full">★ Resmi</span>
+                  <span className="border border-[#d1d5db] text-[#4b5563] text-[10px] px-2 py-1 rounded-full">👤 Pengunjung</span>
+                </div>
               </div>
-              <div className="grid grid-cols-3 gap-2 mb-3">
+              {/* Mobile: 2 kolom lebih besar. Desktop: 3 kolom */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-3">
                 {gallery.map((item) => (
                   <div
                     key={item.id}
-                    className="rounded-lg h-[72px] overflow-hidden relative cursor-pointer hover:opacity-90 transition"
+                    className="rounded-lg h-[90px] sm:h-[72px] overflow-hidden relative cursor-pointer hover:opacity-90 transition"
                   >
                     {item.img ? (
                       <img src={item.img} alt="" className="w-full h-full object-cover" />
@@ -200,14 +200,13 @@ export default function Destinasi() {
             </div>
 
             {/* Ulasan */}
-            <div className="border border-[#d1d5db] rounded-xl p-5">
+            <div className="border border-[#d1d5db] rounded-xl p-4 sm:p-5">
               <h2 className="text-[#111827] text-[15px] font-medium mb-4 border-l-4 border-[#0f6e56] pl-2">
                 Ulasan Pengunjung
               </h2>
-              {/* Rating summary */}
-              <div className="flex gap-5 mb-5">
-                <div className="flex flex-col items-center w-[70px]">
-                  <span className="text-[#111827] text-[32px] font-light">4.8</span>
+              <div className="flex gap-4 sm:gap-5 mb-5">
+                <div className="flex flex-col items-center w-[65px] sm:w-[70px]">
+                  <span className="text-[#111827] text-[30px] sm:text-[32px] font-light">4.8</span>
                   <span className="text-[#0f6e56] text-[13px]">★★★★★</span>
                   <span className="text-[#9ca3af] text-[11px]">127 ulasan</span>
                 </div>
@@ -230,7 +229,6 @@ export default function Destinasi() {
                   ))}
                 </div>
               </div>
-              {/* Review items */}
               <div className="flex flex-col gap-4">
                 {reviews.map((r) => (
                   <div key={r.id} className="border-t border-[#f3f4f6] pt-4">
@@ -255,18 +253,20 @@ export default function Destinasi() {
           </div>
 
           {/* ===== SIDEBAR KANAN ===== */}
-          <div className="w-[449px] shrink-0 flex flex-col gap-4">
+          {/* Mobile: lebar penuh, urutan setelah kolom kiri */}
+          {/* Desktop: fixed width 320px (dikurangi dari 449px yang terlalu lebar) */}
+          <div className="w-full sm:w-[320px] lg:w-[360px] shrink-0 flex flex-col gap-4">
 
             {/* Status Strip */}
             <div className="bg-[#e8f5f0] border border-[#5dcaa5] rounded-xl px-4 py-3 flex items-center gap-2">
-              <div className="w-2 h-2 bg-[#0f6e56] rounded-full"></div>
+              <div className="w-2 h-2 bg-[#0f6e56] rounded-full flex-shrink-0"></div>
               <span className="text-[#0f6e56] text-[13px]">
                 Tersedia untuk booking — 3 slot tersisa minggu ini
               </span>
             </div>
+
             {/* Booking Card */}
             <div className="border border-[#d1d5db] rounded-xl overflow-hidden">
-              {/* Header */}
               <div className="bg-[#0f6e56] px-4 py-3 flex items-center justify-between border-b border-[#085041]">
                 <div>
                   <p className="text-white text-[14px] font-medium">Forest Bathing Dasar</p>
@@ -277,7 +277,6 @@ export default function Destinasi() {
                   <span className="text-[#9fe1cb] text-[11px]"> /orang</span>
                 </div>
               </div>
-              {/* Body */}
               <div className="p-4 flex flex-col gap-3">
                 {[
                   "Durasi 3 jam (08.00–11.00)",
@@ -288,8 +287,7 @@ export default function Destinasi() {
                     <span className="text-[#5dcaa5]">✓</span> {item}
                   </p>
                 ))}
-                {/* Tags */}
-                <div className="flex gap-2">
+                <div className="flex gap-2 flex-wrap">
                   {["Teh herbal", "Asuransi", "Sertifikat"].map((tag) => (
                     <span
                       key={tag}
@@ -302,7 +300,6 @@ export default function Destinasi() {
 
                 <hr className="border-[#f3f4f6]" />
 
-                {/* Tanggal */}
                 <div>
                   <label className="text-[#4b5563] text-[12px] block mb-1">Tanggal kunjungan</label>
                   <input
@@ -312,7 +309,6 @@ export default function Destinasi() {
                   />
                 </div>
 
-                {/* Peserta & Total */}
                 <div className="grid grid-cols-2 gap-3">
                   <div>
                     <label className="text-[#4b5563] text-[12px] block mb-1">Peserta</label>
@@ -334,7 +330,6 @@ export default function Destinasi() {
                   </div>
                 </div>
 
-                {/* Submit */}
                 <button className="w-full bg-[#0f6e56] text-white text-[13px] py-2.5 rounded-lg hover:bg-[#085041] transition">
                   Booking Paket Ini
                 </button>
@@ -376,7 +371,7 @@ export default function Destinasi() {
                 Chat dengan pengelola
               </button>
               <div className="flex items-center gap-1.5">
-                <div className="w-1.5 h-1.5 bg-[#5dcaa5] rounded-full"></div>
+                <div className="w-1.5 h-1.5 bg-[#5dcaa5] rounded-full flex-shrink-0"></div>
                 <span className="text-[#9ca3af] text-[11px]">
                   Online sekarang · biasanya balas dalam 5 mnt
                 </span>
@@ -387,6 +382,5 @@ export default function Destinasi() {
         </div>
       </div>
     </div>
-      
   )
 }

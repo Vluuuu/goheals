@@ -3,6 +3,7 @@ import Navbar from '../components/Navbar'
 import tripForest from '../assets/trip-forestBathingDasar-div.pkg-img.png'
 import tripYoga from '../assets/trip-forest healing yoga-meditasi-div.pkg-img.png'
 import tripCamp from '../assets/trip-forestCamp-div.pkg-img.png'
+
 const packages = [
   {
     id: 1,
@@ -58,8 +59,8 @@ const packages = [
   },
 ]
 
-const filterChips = ["Semua", "Setengah hari", "Seharian", "Overnight", "Untuk grup"]
-const durasiChips = ["1–3 jam", "4–6 jam", "Seharian", "Overnight"]
+const filterChips   = ["Semua", "Setengah hari", "Seharian", "Overnight", "Untuk grup"]
+const durasiChips   = ["1–3 jam", "4–6 jam", "Seharian", "Overnight"]
 const kapasitasChips = ["1–5", "6–15", "16–30", "30+"]
 
 const kategoriList = [
@@ -73,346 +74,353 @@ const kategoriList = [
 const fasilitasList = ["Pemandu naturalis", "Teh herbal", "Makan siang", "Penginapan"]
 
 export default function Trip() {
-  const [activeFilter, setActiveFilter] = useState("Semua")
-  const [activeDurasi, setActiveDurasi] = useState(["1–3 jam"])
-  const [activeKap, setActiveKap] = useState(["1–5", "6–15"])
-  const [checkedKat, setCheckedKat] = useState(["Forest bathing", "Yoga & meditasi"])
-  const [checkedFas, setCheckedFas] = useState(["Pemandu naturalis", "Teh herbal"])
-  const [activePage, setActivePage] = useState(1)
+  const [activeFilter, setActiveFilter]   = useState("Semua")
+  const [activeDurasi, setActiveDurasi]   = useState(["1–3 jam"])
+  const [activeKap, setActiveKap]         = useState(["1–5", "6–15"])
+  const [checkedKat, setCheckedKat]       = useState(["Forest bathing", "Yoga & meditasi"])
+  const [checkedFas, setCheckedFas]       = useState(["Pemandu naturalis", "Teh herbal"])
+  const [activePage, setActivePage]       = useState(1)
+  const [minHarga, setMinHarga]           = useState(185)
+  const [maxHarga, setMaxHarga]           = useState(500)
+  const [selected, setSelected]           = useState(null)
+  const [filterOpen, setFilterOpen]       = useState(false)
 
   const toggleArr = (arr, setArr, val) => {
     setArr(arr.includes(val) ? arr.filter(v => v !== val) : [...arr, val])
   }
-  const [minHarga, setMinHarga] = useState(185)
-  const [maxHarga, setMaxHarga] = useState(500)
-  const [selected, setSelected] = useState(null)
+
+  // Konten sidebar filter — dipakai di desktop sidebar & mobile panel
+  const FilterPanel = () => (
+    <div className="flex flex-col gap-5">
+
+      {/* Durasi */}
+      <div>
+        <p className="text-[#9ca3af] text-[11px] uppercase tracking-wider mb-3">Durasi</p>
+        <div className="flex flex-wrap gap-2">
+          {durasiChips.map((c) => (
+            <button
+              key={c}
+              onClick={() => toggleArr(activeDurasi, setActiveDurasi, c)}
+              className={`text-[12px] px-3 py-1 rounded-lg border transition ${
+                activeDurasi.includes(c)
+                  ? "bg-[#0f6e56] text-white border-[#0f6e56]"
+                  : "bg-white text-[#4b5563] border-[#d1d5db] hover:border-[#0f6e56]"
+              }`}
+            >
+              {c}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Rentang Harga */}
+      <div>
+        <p className="text-[#9ca3af] text-[11px] uppercase tracking-wider mb-3">Rentang Harga</p>
+        <div className="flex justify-between mb-3">
+          <span className="text-[12px] text-[#0f6e56] font-medium">Rp{minHarga}k</span>
+          <span className="text-[12px] text-[#0f6e56] font-medium">Rp{maxHarga}k</span>
+        </div>
+        <div className="relative flex items-center" style={{ height: '20px' }}>
+          <div className="absolute w-full h-1.5 bg-[#e5e7eb] rounded-full" />
+          <div
+            className="absolute h-1.5 bg-[#0f6e56] rounded-full"
+            style={{
+              left:  `${((minHarga - 100) / 500) * 100}%`,
+              right: `${100 - ((maxHarga - 100) / 500) * 100}%`,
+            }}
+          />
+          <input
+            type="range" min={100} max={600} value={minHarga}
+            onChange={(e) => { const v = Number(e.target.value); if (v < maxHarga - 50) setMinHarga(v) }}
+            className="thumb-min"
+          />
+          <input
+            type="range" min={100} max={600} value={maxHarga}
+            onChange={(e) => { const v = Number(e.target.value); if (v > minHarga + 50) setMaxHarga(v) }}
+            className="thumb-max"
+          />
+        </div>
+        <div className="flex justify-between mt-2">
+          <span className="text-[11px] text-[#9ca3af]">Rp100k</span>
+          <span className="text-[11px] text-[#9ca3af]">Rp600k</span>
+        </div>
+      </div>
+
+      {/* Kategori */}
+      <div>
+        <p className="text-[#9ca3af] text-[11px] uppercase tracking-wider mb-3">Kategori Aktivitas</p>
+        <div className="flex flex-col gap-2">
+          {kategoriList.map((k) => (
+            <label key={k.label} className="flex items-center justify-between cursor-pointer">
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={checkedKat.includes(k.label)}
+                  onChange={() => toggleArr(checkedKat, setCheckedKat, k.label)}
+                  className="accent-[#0f6e56] w-3.5 h-3.5"
+                />
+                <span className="text-[13px] text-[#111827]">{k.label}</span>
+              </div>
+              <span className="text-[11px] text-[#9ca3af]">{k.count}</span>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      {/* Kapasitas */}
+      <div>
+        <p className="text-[#9ca3af] text-[11px] uppercase tracking-wider mb-3">Kapasitas Grup</p>
+        <div className="flex flex-wrap gap-2">
+          {kapasitasChips.map((c) => (
+            <button
+              key={c}
+              onClick={() => toggleArr(activeKap, setActiveKap, c)}
+              className={`text-[12px] px-3 py-1 rounded-lg border transition ${
+                activeKap.includes(c)
+                  ? "bg-[#0f6e56] text-white border-[#0f6e56]"
+                  : "bg-white text-[#4b5563] border-[#d1d5db] hover:border-[#0f6e56]"
+              }`}
+            >
+              {c}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Fasilitas */}
+      <div>
+        <p className="text-[#9ca3af] text-[11px] uppercase tracking-wider mb-3">Fasilitas Termasuk</p>
+        <div className="flex flex-col gap-2">
+          {fasilitasList.map((f) => (
+            <label key={f} className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={checkedFas.includes(f)}
+                onChange={() => toggleArr(checkedFas, setCheckedFas, f)}
+                className="accent-[#0f6e56] w-3.5 h-3.5"
+              />
+              <span className="text-[13px] text-[#111827]">{f}</span>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      <button className="text-[#4b5563] text-[13px] border border-[#d1d5db] rounded-lg py-1.5 hover:border-[#0f6e56] hover:text-[#0f6e56] transition">
+        Reset filter
+      </button>
+    </div>
+  )
+
   return (
     <div className="bg-white min-h-screen">
       <Navbar />
       <div className="pt-[50px]">
 
-{/* ===== HERO ===== */}
-<div className="bg-[#085041] px-7 pt-6 pb-0">
+        {/* ===== HERO ===== */}
+        <div className="bg-[#085041] px-5 sm:px-7 pt-5 sm:pt-6 pb-0">
 
-  {/* Baris atas: judul + stats */}
-  <div className="flex items-start justify-between mb-5">
+          {/* Mobile: stack vertikal. Desktop: baris judul + stat */}
+          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4 sm:mb-5">
 
-    {/* Kiri */}
-    <div className="flex flex-col gap-1.5">
-      <div className="border border-white/20 rounded-full px-3 py-1 w-fit">
-        <span className="text-white/80 text-[12px]">Modul Trip</span>
-      </div>
-      <h1 className="text-white text-[22px] font-semibold mt-1">
-        Pilih paket wisata Anda
-      </h1>
-      <p className="text-white/60 text-[13px]">
-        Forest Healing Padusan · Lereng Gunung Welirang
-      </p>
-    </div>
+            {/* Kiri: judul */}
+            <div className="flex flex-col gap-1.5">
+              <div className="border border-white/20 rounded-full px-3 py-1 w-fit">
+                <span className="text-white/80 text-[12px]">Modul Trip</span>
+              </div>
+              <h1 className="text-white text-[20px] sm:text-[22px] font-semibold mt-1">
+                Pilih paket wisata Anda
+              </h1>
+              <p className="text-white/60 text-[13px]">
+                Forest Healing Padusan · Lereng Gunung Welirang
+              </p>
+            </div>
 
-    {/* Kanan: stat boxes */}
-    <div className="flex gap-3">
-      {[
-        { value: "18", label: "Paket aktif" },
-        { value: "3", label: "Slot tersisa hari ini" },
-        { value: "Rp185k", label: "Mulai dari" },
-      ].map((s) => (
-        <div
-          key={s.label}
-          className="border border-white/20 rounded-xl px-6 py-3 text-center min-w-[100px]"
-        >
-          <p className="text-white text-[20px] font-semibold">{s.value}</p>
-          <p className="text-white/60 text-[11px] mt-0.5">{s.label}</p>
+            {/* Kanan: stat boxes — scroll horizontal di mobile */}
+            <div className="flex gap-2 sm:gap-3 overflow-x-auto scrollbar-hide pb-1 sm:pb-0">
+              {[
+                { value: "18",     label: "Paket aktif" },
+                { value: "3",      label: "Slot tersisa hari ini" },
+                { value: "Rp185k", label: "Mulai dari" },
+              ].map((s) => (
+                <div
+                  key={s.label}
+                  className="flex-shrink-0 border border-white/20 rounded-xl px-4 sm:px-6 py-2.5 sm:py-3 text-center min-w-[90px] sm:min-w-[100px]"
+                >
+                  <p className="text-white text-[18px] sm:text-[20px] font-semibold">{s.value}</p>
+                  <p className="text-white/60 text-[11px] mt-0.5">{s.label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Filter bar — mobile: scroll chip, sembunyikan sort */}
+          <div className="bg-[#0f6e56]/50 rounded-xl px-3 py-2 mb-4">
+            {/* Chips — scroll horizontal di mobile */}
+            <div className="flex items-center gap-2">
+              <div className="flex gap-1 overflow-x-auto scrollbar-hide flex-1">
+                {filterChips.map((chip) => (
+                  <button
+                    key={chip}
+                    onClick={() => setActiveFilter(chip)}
+                    className={`flex-shrink-0 text-[13px] px-3 sm:px-4 py-1.5 rounded-lg transition ${
+                      activeFilter === chip
+                        ? "bg-[#5dcaa5] text-[#085041] font-medium"
+                        : "text-white/80 hover:bg-white/10"
+                    }`}
+                  >
+                    {chip}
+                  </button>
+                ))}
+              </div>
+              {/* Sort — hanya desktop */}
+              <div className="hidden sm:flex items-center gap-2 flex-shrink-0">
+                <span className="text-white/80 text-[13px]">Urutkan:</span>
+                <select className="border border-white/20 rounded-lg px-3 py-1.5 text-[13px] text-white bg-[#085041] focus:outline-none">
+                  <option>Terpopuler</option>
+                  <option>Harga terendah</option>
+                  <option>Rating tertinggi</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
         </div>
-      ))}
-    </div>
 
-  </div>
-
-  {/* Filter Bar */}
-  <div className="flex items-center justify-between bg-[#0f6e56]/50 rounded-xl px-3 py-2 mb-4">
-    <div className="flex gap-1">
-      {filterChips.map((chip) => (
-        <button
-          key={chip}
-          onClick={() => setActiveFilter(chip)}
-          className={`text-[13px] px-4 py-1.5 rounded-lg transition ${
-            activeFilter === chip
-              ? "bg-[#5dcaa5] text-[#085041] font-medium"
-              : "text-white/80 hover:bg-white/10"
-          }`}
-        >
-          {chip}
-        </button>
-      ))}
-    </div>
-    <div className="flex items-center gap-2">
-      <span className="text-white/80 text-[13px]">Urutkan:</span>
-      <select className="border border-white/20 rounded-lg px-3 py-1.5 text-[13px] text-white bg-[#085041] focus:outline-none">
-        <option>Terpopuler</option>
-        <option>Harga terendah</option>
-        <option>Rating tertinggi</option>
-      </select>
-    </div>
-  </div>
-
-</div>
         {/* ===== BODY ===== */}
         <div className="flex gap-0">
 
-          {/* ===== SIDEBAR FILTER ===== */}
-          <div className="w-[220px] shrink-0 border-r border-[#f3f4f6] px-5 py-5 flex flex-col gap-5">
-
-            {/* Durasi */}
-            <div>
-              <p className="text-[#9ca3af] text-[11px] uppercase tracking-wider mb-3">Durasi</p>
-              <div className="flex flex-wrap gap-2">
-                {durasiChips.map((c) => (
-                  <button
-                    key={c}
-                    onClick={() => toggleArr(activeDurasi, setActiveDurasi, c)}
-                    className={`text-[12px] px-3 py-1 rounded-lg border transition ${
-                      activeDurasi.includes(c)
-                        ? "bg-[#0f6e56] text-white border-[#0f6e56]"
-                        : "bg-white text-[#4b5563] border-[#d1d5db] hover:border-[#0f6e56]"
-                    }`}
-                  >
-                    {c}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Rentang Harga */}
-            <div>
-              <p className="text-[#9ca3af] text-[11px] uppercase tracking-wider mb-3">Rentang Harga</p>
-
-              {/* Label nilai */}
-              <div className="flex justify-between mb-3">
-                <span className="text-[12px] text-[#0f6e56] font-medium">Rp{minHarga}k</span>
-                <span className="text-[12px] text-[#0f6e56] font-medium">Rp{maxHarga}k</span>
-              </div>
-
-              {/* Dual Slider */}
-              <div className="relative flex items-center" style={{ height: '20px' }}>
-                {/* Track abu */}
-                <div className="absolute w-full h-1.5 bg-[#e5e7eb] rounded-full" />
-                {/* Track hijau aktif */}
-                <div
-                  className="absolute h-1.5 bg-[#0f6e56] rounded-full"
-                  style={{
-                    left: `${((minHarga - 100) / 500) * 100}%`,
-                    right: `${100 - ((maxHarga - 100) / 500) * 100}%`,
-                  }}
-                />
-                {/* Input Min */}
-                <input
-                  type="range"
-                  min={100}
-                  max={600}
-                  value={minHarga}
-                  onChange={(e) => {
-                    const val = Number(e.target.value)
-                    if (val < maxHarga - 50) setMinHarga(val)
-                  }}
-                  className="thumb-min"
-                />
-                {/* Input Max */}
-                <input
-                  type="range"
-                  min={100}
-                  max={600}
-                  value={maxHarga}
-                  onChange={(e) => {
-                    const val = Number(e.target.value)
-                    if (val > minHarga + 50) setMaxHarga(val)
-                  }}
-                  className="thumb-max"
-                />
-              </div>
-
-              {/* Label batas */}
-              <div className="flex justify-between mt-2">
-                <span className="text-[11px] text-[#9ca3af]">Rp100k</span>
-                <span className="text-[11px] text-[#9ca3af]">Rp600k</span>
-              </div>
-            </div>
-
-            {/* Kategori Aktivitas */}
-            <div>
-              <p className="text-[#9ca3af] text-[11px] uppercase tracking-wider mb-3">Kategori Aktivitas</p>
-              <div className="flex flex-col gap-2">
-                {kategoriList.map((k) => (
-                  <label key={k.label} className="flex items-center justify-between cursor-pointer">
-                    <div className="flex items-center gap-2">
-                      <input
-                        type="checkbox"
-                        checked={checkedKat.includes(k.label)}
-                        onChange={() => toggleArr(checkedKat, setCheckedKat, k.label)}
-                        className="accent-[#0f6e56] w-3.5 h-3.5"
-                      />
-                      <span className="text-[13px] text-[#111827]">{k.label}</span>
-                    </div>
-                    <span className="text-[11px] text-[#9ca3af]">{k.count}</span>
-                  </label>
-                ))}
-              </div>
-            </div>
-
-            {/* Kapasitas Grup */}
-            <div>
-              <p className="text-[#9ca3af] text-[11px] uppercase tracking-wider mb-3">Kapasitas Grup</p>
-              <div className="flex flex-wrap gap-2">
-                {kapasitasChips.map((c) => (
-                  <button
-                    key={c}
-                    onClick={() => toggleArr(activeKap, setActiveKap, c)}
-                    className={`text-[12px] px-3 py-1 rounded-lg border transition ${
-                      activeKap.includes(c)
-                        ? "bg-[#0f6e56] text-white border-[#0f6e56]"
-                        : "bg-white text-[#4b5563] border-[#d1d5db] hover:border-[#0f6e56]"
-                    }`}
-                  >
-                    {c}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Fasilitas */}
-            <div>
-              <p className="text-[#9ca3af] text-[11px] uppercase tracking-wider mb-3">Fasilitas Termasuk</p>
-              <div className="flex flex-col gap-2">
-                {fasilitasList.map((f) => (
-                  <label key={f} className="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={checkedFas.includes(f)}
-                      onChange={() => toggleArr(checkedFas, setCheckedFas, f)}
-                      className="accent-[#0f6e56] w-3.5 h-3.5"
-                    />
-                    <span className="text-[13px] text-[#111827]">{f}</span>
-                  </label>
-                ))}
-              </div>
-            </div>
-
-            {/* Reset */}
-            <button className="text-[#4b5563] text-[13px] border border-[#d1d5db] rounded-lg py-1.5 hover:border-[#0f6e56] hover:text-[#0f6e56] transition">
-              Reset filter
-            </button>
-
+          {/* ===== SIDEBAR — hanya desktop ===== */}
+          <div className="hidden sm:flex w-[220px] shrink-0 border-r border-[#f3f4f6] px-5 py-5 flex-col gap-5">
+            <FilterPanel />
           </div>
 
           {/* ===== PACKAGE LIST ===== */}
-          <div className="flex-1 flex flex-col gap-0 p-5">
+          <div className="flex-1 flex flex-col gap-0 px-4 sm:px-5 py-4 sm:py-5 min-w-0">
+
+            {/* Toolbar mobile: filter toggle + sort */}
+            <div className="flex items-center gap-2 mb-4 sm:hidden">
+              <button
+                onClick={() => setFilterOpen(!filterOpen)}
+                className="flex items-center gap-1.5 border border-[#d1d5db] text-[#4b5563] text-[13px] px-3 py-1.5 rounded-lg hover:border-[#0f6e56] hover:text-[#0f6e56] transition"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 4h18M7 8h10M11 12h2" />
+                </svg>
+                Filter
+              </button>
+              <select className="flex-1 border border-[#d1d5db] rounded-lg px-3 py-1.5 text-[13px] text-[#4b5563] focus:outline-none focus:border-[#0f6e56]">
+                <option>Terpopuler</option>
+                <option>Harga terendah</option>
+                <option>Rating tertinggi</option>
+              </select>
+            </div>
+
+            {/* Panel filter mobile — collapsible */}
+            <div className={`sm:hidden overflow-hidden transition-all duration-300 ${filterOpen ? 'max-h-[800px] mb-4' : 'max-h-0'}`}>
+              <div className="border border-[#e5e7eb] rounded-xl p-4">
+                <FilterPanel />
+              </div>
+            </div>
+
+            {/* Package cards */}
             {packages.map((pkg) => (
               <div
                 key={pkg.id}
                 onClick={() => setSelected(pkg.id)}
-                className={`rounded-xl overflow-hidden flex mb-4 hover:shadow-md transition cursor-pointer border ${
+                className={`rounded-xl overflow-hidden mb-4 hover:shadow-md transition cursor-pointer border ${
                   selected === pkg.id
                     ? "border-[#5dcaa5] shadow-md"
                     : "border-[#d1d5db]"
                 }`}
               >
-                {/* Foto kiri */}
-                <div className="w-[180px] shrink-0 overflow-hidden relative">
-                  <img src={pkg.img} alt={pkg.name} className="w-full h-full object-cover" />
-                  <span className="absolute bottom-3 left-3 bg-black/40 text-white text-[12px] px-3 py-1 rounded-full">
-                    {pkg.duration}
-                  </span>
-                </div>
+                {/* Mobile: foto di atas, konten di bawah */}
+                {/* Desktop: foto kiri, konten kanan */}
+                <div className="flex flex-col sm:flex-row">
 
-                {/* Konten kanan */}
-                <div className="flex-1 p-4 flex flex-col gap-2">
+                  {/* Foto */}
+                  <div className="w-full sm:w-[180px] h-[160px] sm:h-auto shrink-0 overflow-hidden relative">
+                    <img src={pkg.img} alt={pkg.name} className="w-full h-full object-cover" />
+                    <span className="absolute bottom-3 left-3 bg-black/40 text-white text-[12px] px-3 py-1 rounded-full">
+                      {pkg.duration}
+                    </span>
+                  </div>
 
-                  {/* Top: nama + harga */}
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <p className="text-[#111827] text-[15px] font-medium">{pkg.name}</p>
-                      <div className="flex gap-2 mt-1">
-                        {pkg.badges.map((b) => (
-                          <span
-                            key={b.label}
-                            className={`text-[11px] px-2 py-0.5 rounded-full ${b.color}`}
-                          >
-                            {b.label}
-                          </span>
-                        ))}
+                  {/* Konten */}
+                  <div className="flex-1 p-4 flex flex-col gap-2">
+
+                    {/* Nama + harga */}
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex-1 min-w-0">
+                        <p className="text-[#111827] text-[15px] font-medium">{pkg.name}</p>
+                        <div className="flex gap-2 mt-1 flex-wrap">
+                          {pkg.badges.map((b) => (
+                            <span key={b.label} className={`text-[11px] px-2 py-0.5 rounded-full ${b.color}`}>
+                              {b.label}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="text-right flex-shrink-0">
+                        <p className="text-[#0f6e56] text-[15px] sm:text-[16px] font-medium">{pkg.price}</p>
+                        <p className="text-[#9ca3af] text-[11px]">/orang</p>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <p className="text-[#0f6e56] text-[16px] font-medium">{pkg.price}</p>
-                      <p className="text-[#9ca3af] text-[11px]">/orang</p>
-                    </div>
-                  </div>
 
-                  {/* Progress bar */}
-                  {pkg.slotLabel && (
-                    <div className="flex items-center gap-2">
-                      <div className="flex-1 bg-[#e5e7eb] rounded-full h-1.5">
-                        <div
-                          className="bg-[#0f6e56] h-1.5 rounded-full"
-                          style={{ width: `${pkg.slotPct}%` }}
-                        />
+                    {/* Progress bar */}
+                    {pkg.slotLabel && (
+                      <div className="flex items-center gap-2">
+                        <div className="flex-1 bg-[#e5e7eb] rounded-full h-1.5">
+                          <div className="bg-[#0f6e56] h-1.5 rounded-full" style={{ width: `${pkg.slotPct}%` }} />
+                        </div>
+                        <span className="text-[11px] text-orange-500">{pkg.slotLabel}</span>
                       </div>
-                      <span className="text-[11px] text-orange-500">{pkg.slotLabel}</span>
+                    )}
+
+                    {/* Deskripsi */}
+                    <p className="text-[#4b5563] text-[13px] leading-[20px]">{pkg.desc}</p>
+
+                    {/* Meta chips — scroll horizontal di mobile */}
+                    <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-0.5">
+                      {pkg.meta.map((m) => (
+                        <span key={m} className="flex-shrink-0 text-[#4b5563] text-[12px] bg-[#f9fafb] border border-[#f3f4f6] px-2 py-0.5 rounded">
+                          {m}
+                        </span>
+                      ))}
                     </div>
-                  )}
 
-                  {/* Deskripsi */}
-                  <p className="text-[#4b5563] text-[13px] leading-[20px]">{pkg.desc}</p>
-
-                  {/* Meta */}
-                  <div className="flex gap-4">
-                    {pkg.meta.map((m) => (
-                      <span
-                        key={m}
-                        className="text-[#4b5563] text-[12px] bg-[#f9fafb] border border-[#f3f4f6] px-2 py-0.5 rounded"
-                      >
-                        {m}
-                      </span>
-                    ))}
-                  </div>
-
-                  {/* Tags includes */}
-                  <div className="flex gap-2 flex-wrap">
-                    {pkg.includes.map((tag) => (
-                      <span
-                        key={tag}
-                        className="text-[11px] text-[#0f6e56] bg-[#e1f5ee] px-2.5 py-1 rounded-full"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-
-                  {/* Footer */}
-                  <div className="flex items-center justify-between mt-1">
-                    <div className="flex items-center gap-1.5">
-                      <div className="w-1.5 h-1.5 bg-[#5dcaa5] rounded-full"></div>
-                      <span className={`text-[12px] ${pkg.availColor}`}>{pkg.avail}</span>
+                    {/* Tags includes */}
+                    <div className="flex gap-2 flex-wrap">
+                      {pkg.includes.map((tag) => (
+                        <span key={tag} className="text-[11px] text-[#0f6e56] bg-[#e1f5ee] px-2.5 py-1 rounded-full">
+                          {tag}
+                        </span>
+                      ))}
                     </div>
-                    <div className="flex gap-2">
-                      <button className="border border-[#d1d5db] text-[#4b5563] text-[12px] px-4 py-1.5 rounded-lg hover:border-[#0f6e56] hover:text-[#0f6e56] transition">
-                        Simpan
-                      </button>
-                      <button className="bg-[#0f6e56] text-white text-[12px] px-4 py-1.5 rounded-lg hover:bg-[#085041] transition">
-                        Booking
-                      </button>
-                    </div>
-                  </div>
 
+                    {/* Footer card */}
+                    <div className="flex items-center justify-between mt-1 gap-2 flex-wrap">
+                      <div className="flex items-center gap-1.5">
+                        <div className="w-1.5 h-1.5 bg-[#5dcaa5] rounded-full flex-shrink-0"></div>
+                        <span className={`text-[12px] ${pkg.availColor}`}>{pkg.avail}</span>
+                      </div>
+                      <div className="flex gap-2">
+                        <button className="border border-[#d1d5db] text-[#4b5563] text-[12px] px-3 sm:px-4 py-1.5 rounded-lg hover:border-[#0f6e56] hover:text-[#0f6e56] transition">
+                          Simpan
+                        </button>
+                        <button className="bg-[#0f6e56] text-white text-[12px] px-3 sm:px-4 py-1.5 rounded-lg hover:bg-[#085041] transition">
+                          Booking
+                        </button>
+                      </div>
+                    </div>
+
+                  </div>
                 </div>
               </div>
             ))}
 
             {/* Pagination */}
             <div className="flex items-center justify-center gap-2 mt-2">
-              <button className="w-8 h-8 border border-[#d1d5db] rounded-lg flex items-center justify-center text-[#4b5563] hover:border-[#0f6e56] transition">
-                ‹
-              </button>
+              <button className="w-8 h-8 border border-[#d1d5db] rounded-lg flex items-center justify-center text-[#4b5563] hover:border-[#0f6e56] transition">‹</button>
               {[1, 2, 3].map((p) => (
                 <button
                   key={p}
@@ -427,12 +435,8 @@ export default function Trip() {
                 </button>
               ))}
               <span className="text-[#9ca3af] text-[13px]">...</span>
-              <button className="w-8 h-8 border border-[#d1d5db] rounded-lg text-[13px] text-[#4b5563] hover:border-[#0f6e56] transition">
-                6
-              </button>
-              <button className="w-8 h-8 border border-[#d1d5db] rounded-lg flex items-center justify-center text-[#4b5563] hover:border-[#0f6e56] transition">
-                ›
-              </button>
+              <button className="w-8 h-8 border border-[#d1d5db] rounded-lg text-[13px] text-[#4b5563] hover:border-[#0f6e56] transition">6</button>
+              <button className="w-8 h-8 border border-[#d1d5db] rounded-lg flex items-center justify-center text-[#4b5563] hover:border-[#0f6e56] transition">›</button>
             </div>
 
           </div>

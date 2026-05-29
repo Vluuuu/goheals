@@ -10,13 +10,13 @@ export default function Hero() {
 
   return (
     <section
-      className="relative h-[393px] flex items-center overflow-hidden"
+      className="relative min-h-[393px] sm:h-[393px] flex items-center overflow-hidden"
       style={{
         background: 'linear-gradient(147deg, #085041 0%, #0f6e56 40%, #1d9e75 100%)',
       }}
     >
-      {/* Foto hutan kanan */}
-      <div className="absolute right-0 top-0 w-[55%] h-full">
+      {/* Foto hutan kanan - sembunyikan di mobile */}
+      <div className="absolute right-0 top-0 w-[55%] h-full hidden sm:block">
         <img
           src={heroBg}
           alt="hutan"
@@ -31,7 +31,7 @@ export default function Hero() {
       </div>
 
       {/* Konten kiri */}
-      <div className="relative z-10 flex flex-col gap-3 max-w-[520px] px-8">
+      <div className="relative z-10 flex flex-col gap-3 w-full sm:max-w-[520px] px-6 sm:px-8 py-10 sm:py-0">
 
         {/* Badge */}
         <div
@@ -58,10 +58,10 @@ export default function Hero() {
             transitionDelay: '100ms',
           }}
         >
-          <h1 className="text-white text-[32px] leading-[40px] font-normal">
+          <h1 className="text-white text-[24px] sm:text-[32px] leading-[32px] sm:leading-[40px] font-normal">
             Pulihkan diri di
           </h1>
-          <h1 className="text-[32px] leading-[40px] font-normal">
+          <h1 className="text-[24px] sm:text-[32px] leading-[32px] sm:leading-[40px] font-normal">
             <span className="text-white">alam yang </span>
             <span className="text-[#5dcaa5]">menyembuhkan</span>
           </h1>
@@ -70,7 +70,7 @@ export default function Hero() {
         {/* Deskripsi */}
         <p
           ref={desc.ref}
-          className="text-white/75 text-[14px] leading-[22px] max-w-[380px] transition-all duration-700 ease-out"
+          className="text-white/75 text-[13px] sm:text-[14px] leading-[22px] max-w-full sm:max-w-[380px] transition-all duration-700 ease-out"
           style={{
             opacity: desc.visible ? 1 : 0,
             transform: desc.visible ? 'translateY(0)' : 'translateY(24px)',
@@ -85,17 +85,17 @@ export default function Hero() {
         {/* Tombol */}
         <div
           ref={buttons.ref}
-          className="flex gap-3 mt-1 transition-all duration-700 ease-out"
+          className="flex flex-col sm:flex-row gap-3 mt-1 transition-all duration-700 ease-out"
           style={{
             opacity: buttons.visible ? 1 : 0,
             transform: buttons.visible ? 'translateY(0)' : 'translateY(24px)',
             transitionDelay: '300ms',
           }}
         >
-          <button className="bg-white text-[#0f6e56] text-[13px] px-5 py-2.5 rounded-lg hover:bg-gray-100 transition">
+          <button className="bg-white text-[#0f6e56] text-[13px] px-5 py-2.5 rounded-lg hover:bg-gray-100 transition text-center">
             Booking Sekarang
           </button>
-          <button className="border border-white/40 text-white text-[13px] px-5 py-2.5 rounded-lg hover:bg-white/10 transition">
+          <button className="border border-white/40 text-white text-[13px] px-5 py-2.5 rounded-lg hover:bg-white/10 transition text-center">
             Virtual Tour 360°
           </button>
         </div>
@@ -103,7 +103,7 @@ export default function Hero() {
         {/* Statistik */}
         <div
           ref={stats.ref}
-          className="flex gap-6 mt-2 transition-all duration-700 ease-out"
+          className="flex gap-4 sm:gap-6 mt-2 transition-all duration-700 ease-out"
           style={{
             opacity: stats.visible ? 1 : 0,
             transform: stats.visible ? 'translateY(0)' : 'translateY(24px)',

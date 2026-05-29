@@ -78,25 +78,6 @@ const articles = [
 
 const filters = ["Semua", "Kesehatan Mental", "Forest Healing", "Fitonsida", "Tips Wellness"]
 
-// Komponen card dengan animasi staggered individual
-function AnimatedArticleCard({ article, index }) {
-  const { ref, visible } = useScrollAnimation(0.1)
-
-  return (
-    <div
-      ref={ref}
-      className="flex-shrink-0 w-[260px] transition-all duration-700 ease-out"
-      style={{
-        opacity: visible ? 1 : 0,
-        transform: visible ? 'translateY(0)' : 'translateY(36px)',
-        transitionDelay: `${index * 80}ms`,
-      }}
-    >
-      <ArticleCard {...article} />
-    </div>
-  )
-}
-
 export default function Home() {
   const sectionHeader = useScrollAnimation(0.1)
   const filtersAnim   = useScrollAnimation(0.1)
@@ -104,7 +85,7 @@ export default function Home() {
   return (
     <div className="bg-white">
       <Navbar />
-      <div className="pt-[50px]">
+      <div className="pt-[50px] sm:pt-[50px]">
         <Hero />
         <Destination />
 
@@ -152,10 +133,12 @@ export default function Home() {
             ))}
           </div>
 
-          {/* Artikel cards — horizontal scroll + staggered animation */}
+          {/* Artikel cards */}
           <div className="flex gap-4 mt-2 overflow-x-auto pb-2 scrollbar-hide">
-            {articles.map((article, index) => (
-              <AnimatedArticleCard key={article.id} article={article} index={index} />
+            {articles.map((article) => (
+              <div key={article.id} className="flex-shrink-0 w-[260px]">
+                <ArticleCard {...article} />
+              </div>
             ))}
           </div>
 
