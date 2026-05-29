@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Navbar from '../components/Navbar'
 import destMain from '../assets/div.dest-hero-main.png'
 import destSide1 from '../assets/div.dest-hero-side.png'
@@ -10,24 +10,17 @@ import gallery3 from '../assets/div.gallery-item3.png'
 import gallery4 from '../assets/div.gallery-item4.png'
 import gallery5 from '../assets/div.gallery-item5.png'
 import gallery6 from '../assets/div.gallery-item6.png'
+import { useScrollAnimation, useScrollAnimationGroup } from '../hooks/useScrollAnimation'
 
 const tabs = ["Profil", "Galeri", "Virtual Tour", "Paket Wisata", "Ulasan"]
 
 const reviews = [
   {
-    id: 1,
-    initials: "AS",
-    name: "Andi Setiawan",
-    date: "15 Mei 2025",
-    stars: 5,
+    id: 1, initials: "AS", name: "Andi Setiawan", date: "15 Mei 2025", stars: 5,
     text: "Pengalaman yang luar biasa. Udara segar hutan pinus benar-benar terasa berbeda. Jalur meditasinya tertata rapi dan pemandunya sangat informatif.",
   },
   {
-    id: 2,
-    initials: "NR",
-    name: "Nadia Rahmawati",
-    date: "10 Mei 2025",
-    stars: 5,
+    id: 2, initials: "NR", name: "Nadia Rahmawati", date: "10 Mei 2025", stars: 5,
     text: "Booking sangat mudah lewat aplikasi. Konfirmasi langsung masuk ke email. Cocok untuk retreat akhir pekan dari keramaian kota.",
   },
 ]
@@ -41,11 +34,54 @@ const gallery = [
   { id: 6, img: gallery6, label: "+34 foto" },
 ]
 
+const ratingBars = [
+  { star: "5★", pct: 78, color: "#085041" },
+  { star: "4★", pct: 15, color: "#0f6e56" },
+  { star: "3★", pct: 7,  color: "#5dcaa5" },
+]
+
 export default function Destinasi() {
   const [activeTab, setActiveTab] = useState("Profil")
-  const [peserta, setPeserta] = useState(2)
+  const [peserta, setPeserta]     = useState(2)
   const hargaSatuan = 185000
   const total = (hargaSatuan * peserta).toLocaleString("id-ID")
+
+  // ── Mount animation (hero) ──────────────────────────────
+  const [heroStep, setHeroStep] = useState(0)
+  useEffect(() => {
+    const timers = [
+      setTimeout(() => setHeroStep(1), 100),  // foto utama
+      setTimeout(() => setHeroStep(2), 200),  // foto side 1
+      setTimeout(() => setHeroStep(3), 320),  // foto side 2
+      setTimeout(() => setHeroStep(4), 440),  // foto side 3
+      setTimeout(() => setHeroStep(5), 300),  // overlay teks
+    ]
+    return () => timers.forEach(clearTimeout)
+  }, [])
+
+  // ── Scroll animations ───────────────────────────────────
+  const tabsAnim      = useScrollAnimation(0.1)
+  const cardTentang   = useScrollAnimation(0.1)
+  const cardVtour     = useScrollAnimation(0.1)
+  const cardGaleri    = useScrollAnimation(0.1)
+  const cardUlasan    = useScrollAnimation(0.1)
+  const sidebar       = useScrollAnimation(0.05)
+  const galleryGroup  = useScrollAnimationGroup(gallery.length, 0.1)
+  const reviewGroup   = useScrollAnimationGroup(reviews.length, 0.1)
+  const ratingGroup   = useScrollAnimationGroup(ratingBars.length, 0.1)
+
+  // helper style
+  const fadeUp = (visible, delay = 0) => ({
+    opacity:    visible ? 1 : 0,
+    transform:  visible ? 'translateY(0)' : 'translateY(28px)',
+    transition: `opacity 650ms ease-out ${delay}ms, transform 650ms ease-out ${delay}ms`,
+  })
+
+  const fadeRight = (visible, delay = 0) => ({
+    opacity:    visible ? 1 : 0,
+    transform:  visible ? 'translateX(0)' : 'translateX(32px)',
+    transition: `opacity 650ms ease-out ${delay}ms, transform 650ms ease-out ${delay}ms`,
+  })
 
   return (
     <div className="bg-white min-h-screen">
@@ -53,28 +89,42 @@ export default function Destinasi() {
       <div className="pt-[50px]">
 
         {/* ===== HERO ===== */}
-        {/* Mobile: foto utama saja fullwidth, tinggi lebih pendek */}
-        {/* Desktop: 4 foto grid seperti semula */}
-        <div className="relative h-[220px] sm:h-[280px] flex">
+        <div className="relative h-[220px] sm:h-[280px] flex overflow-hidden">
+
           {/* Foto utama */}
-          <div className="w-full sm:w-[59%] h-full overflow-hidden">
+          <div
+            className="w-full sm:w-[59%] h-full overflow-hidden"
+            style={{
+              opacity:    heroStep >= 1 ? 1 : 0,
+              transform:  heroStep >= 1 ? 'scale(1)' : 'scale(1.04)',
+              transition: 'opacity 800ms ease-out, transform 800ms ease-out',
+            }}
+          >
             <img src={destMain} alt="main" className="w-full h-full object-cover" />
           </div>
-          {/* 3 foto samping — sembunyi di mobile */}
+
+          {/* 3 foto samping — stagger, hanya desktop */}
           <div className="hidden sm:flex flex-1">
-            <div className="flex-1 overflow-hidden">
-              <img src={destSide1} alt="s1" className="w-full h-full object-cover" />
-            </div>
-            <div className="flex-1 overflow-hidden">
-              <img src={destSide2} alt="s2" className="w-full h-full object-cover" />
-            </div>
-            <div className="flex-1 overflow-hidden">
-              <img src={destSide3} alt="s3" className="w-full h-full object-cover" />
-            </div>
+            {[destSide1, destSide2, destSide3].map((src, i) => (
+              <div
+                key={i}
+                className="flex-1 overflow-hidden"
+                style={{
+                  opacity:    heroStep >= i + 2 ? 1 : 0,
+                  transform:  heroStep >= i + 2 ? 'scale(1)' : 'scale(1.04)',
+                  transition: 'opacity 700ms ease-out, transform 700ms ease-out',
+                }}
+              >
+                <img src={src} alt={`s${i + 1}`} className="w-full h-full object-cover" />
+              </div>
+            ))}
           </div>
 
-          {/* Overlay info bawah */}
-          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent px-5 sm:px-7 pb-4 pt-10">
+          {/* Overlay teks */}
+          <div
+            className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent px-5 sm:px-7 pb-4 pt-10"
+            style={fadeUp(heroStep >= 5, 0)}
+          >
             <span className="bg-[#0f6e56] text-white text-[11px] px-3 py-1 rounded-full">
               Forest Healing
             </span>
@@ -88,8 +138,11 @@ export default function Destinasi() {
         </div>
 
         {/* ===== TABS ===== */}
-        {/* Scrollable horizontal di mobile */}
-        <div className="border-b border-[#d1d5db] flex overflow-x-auto scrollbar-hide px-4 sm:px-7">
+        <div
+          ref={tabsAnim.ref}
+          className="border-b border-[#d1d5db] flex overflow-x-auto scrollbar-hide px-4 sm:px-7"
+          style={fadeUp(tabsAnim.visible)}
+        >
           {tabs.map((tab) => (
             <button
               key={tab}
@@ -106,15 +159,17 @@ export default function Destinasi() {
         </div>
 
         {/* ===== BODY ===== */}
-        {/* Mobile: kolom tunggal (sidebar turun ke bawah konten) */}
-        {/* Desktop: 2 kolom seperti semula */}
         <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 px-4 sm:px-7 py-5 sm:py-6 max-w-[1280px]">
 
           {/* ===== KOLOM KIRI ===== */}
           <div className="flex flex-col gap-4 flex-1 min-w-0">
 
             {/* Tentang Destinasi */}
-            <div className="border border-[#d1d5db] rounded-xl p-4 sm:p-5">
+            <div
+              ref={cardTentang.ref}
+              className="border border-[#d1d5db] rounded-xl p-4 sm:p-5"
+              style={fadeUp(cardTentang.visible)}
+            >
               <h2 className="text-[#111827] text-[15px] font-medium mb-3 border-l-4 border-[#0f6e56] pl-2">
                 Tentang Destinasi
               </h2>
@@ -126,10 +181,10 @@ export default function Destinasi() {
               </p>
               <div className="grid grid-cols-2 gap-3 sm:gap-4">
                 {[
-                  { label: "Ketinggian", value: "900 mdpl" },
-                  { label: "Luas area", value: "±12 hektare" },
-                  { label: "Jam operasional", value: "06.00 – 17.00 WIB" },
-                  { label: "Kapasitas harian", value: "Max. 80 pengunjung" },
+                  { label: "Ketinggian",        value: "900 mdpl" },
+                  { label: "Luas area",          value: "±12 hektare" },
+                  { label: "Jam operasional",    value: "06.00 – 17.00 WIB" },
+                  { label: "Kapasitas harian",   value: "Max. 80 pengunjung" },
                 ].map((item) => (
                   <div key={item.label}>
                     <p className="text-[#9ca3af] text-[11px]">{item.label}</p>
@@ -140,7 +195,11 @@ export default function Destinasi() {
             </div>
 
             {/* Virtual Tour */}
-            <div className="border border-[#d1d5db] rounded-xl p-4 sm:p-5">
+            <div
+              ref={cardVtour.ref}
+              className="border border-[#d1d5db] rounded-xl p-4 sm:p-5"
+              style={fadeUp(cardVtour.visible)}
+            >
               <h2 className="text-[#111827] text-[15px] font-medium mb-3 border-l-4 border-[#0f6e56] pl-2">
                 Virtual Tour 360°
               </h2>
@@ -164,7 +223,11 @@ export default function Destinasi() {
             </div>
 
             {/* Galeri */}
-            <div className="border border-[#d1d5db] rounded-xl p-4 sm:p-5">
+            <div
+              ref={cardGaleri.ref}
+              className="border border-[#d1d5db] rounded-xl p-4 sm:p-5"
+              style={fadeUp(cardGaleri.visible)}
+            >
               <div className="flex items-center justify-between mb-3">
                 <h2 className="text-[#111827] text-[15px] font-medium">Galeri</h2>
                 <div className="flex gap-2">
@@ -172,12 +235,21 @@ export default function Destinasi() {
                   <span className="border border-[#d1d5db] text-[#4b5563] text-[10px] px-2 py-1 rounded-full">👤 Pengunjung</span>
                 </div>
               </div>
-              {/* Mobile: 2 kolom lebih besar. Desktop: 3 kolom */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-3">
-                {gallery.map((item) => (
+
+              {/* Grid galeri — stagger per item */}
+              <div
+                ref={galleryGroup.ref}
+                className="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-3"
+              >
+                {gallery.map((item, i) => (
                   <div
                     key={item.id}
                     className="rounded-lg h-[90px] sm:h-[72px] overflow-hidden relative cursor-pointer hover:opacity-90 transition"
+                    style={{
+                      opacity:    galleryGroup.isVisible(i) ? 1 : 0,
+                      transform:  galleryGroup.isVisible(i) ? 'scale(1) translateY(0)' : 'scale(0.95) translateY(12px)',
+                      transition: 'opacity 450ms ease-out, transform 450ms ease-out',
+                    }}
                   >
                     {item.img ? (
                       <img src={item.img} alt="" className="w-full h-full object-cover" />
@@ -200,28 +272,39 @@ export default function Destinasi() {
             </div>
 
             {/* Ulasan */}
-            <div className="border border-[#d1d5db] rounded-xl p-4 sm:p-5">
+            <div
+              ref={cardUlasan.ref}
+              className="border border-[#d1d5db] rounded-xl p-4 sm:p-5"
+              style={fadeUp(cardUlasan.visible)}
+            >
               <h2 className="text-[#111827] text-[15px] font-medium mb-4 border-l-4 border-[#0f6e56] pl-2">
                 Ulasan Pengunjung
               </h2>
+
+              {/* Rating summary */}
               <div className="flex gap-4 sm:gap-5 mb-5">
                 <div className="flex flex-col items-center w-[65px] sm:w-[70px]">
                   <span className="text-[#111827] text-[30px] sm:text-[32px] font-light">4.8</span>
                   <span className="text-[#0f6e56] text-[13px]">★★★★★</span>
                   <span className="text-[#9ca3af] text-[11px]">127 ulasan</span>
                 </div>
-                <div className="flex flex-col gap-1.5 flex-1 justify-center">
-                  {[
-                    { star: "5★", pct: 78, w: "78%", color: "#085041" },
-                    { star: "4★", pct: 15, w: "15%", color: "#0f6e56" },
-                    { star: "3★", pct: 7,  w: "7%",  color: "#5dcaa5" },
-                  ].map((r) => (
+
+                {/* Rating bars — animate width */}
+                <div
+                  ref={ratingGroup.ref}
+                  className="flex flex-col gap-1.5 flex-1 justify-center"
+                >
+                  {ratingBars.map((r, i) => (
                     <div key={r.star} className="flex items-center gap-2">
                       <span className="text-[11px] text-[#4b5563] w-5">{r.star}</span>
-                      <div className="flex-1 bg-[#e5e7eb] rounded-full h-1.5">
+                      <div className="flex-1 bg-[#e5e7eb] rounded-full h-1.5 overflow-hidden">
                         <div
-                          className="h-1.5 rounded-full transition-all"
-                          style={{ width: r.w, backgroundColor: r.color }}
+                          className="h-1.5 rounded-full"
+                          style={{
+                            width:           ratingGroup.isVisible(i) ? `${r.pct}%` : '0%',
+                            backgroundColor: r.color,
+                            transition:      `width 700ms ease-out ${i * 120}ms`,
+                          }}
                         />
                       </div>
                       <span className="text-[11px] text-[#9ca3af] w-7">{r.pct}%</span>
@@ -229,9 +312,15 @@ export default function Destinasi() {
                   ))}
                 </div>
               </div>
-              <div className="flex flex-col gap-4">
-                {reviews.map((r) => (
-                  <div key={r.id} className="border-t border-[#f3f4f6] pt-4">
+
+              {/* Review items — stagger */}
+              <div ref={reviewGroup.ref} className="flex flex-col gap-4">
+                {reviews.map((r, i) => (
+                  <div
+                    key={r.id}
+                    className="border-t border-[#f3f4f6] pt-4"
+                    style={fadeUp(reviewGroup.isVisible(i), i * 100)}
+                  >
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-2">
                         <div className="w-7 h-7 bg-[#0f6e56] rounded-full flex items-center justify-center">
@@ -253,9 +342,11 @@ export default function Destinasi() {
           </div>
 
           {/* ===== SIDEBAR KANAN ===== */}
-          {/* Mobile: lebar penuh, urutan setelah kolom kiri */}
-          {/* Desktop: fixed width 320px (dikurangi dari 449px yang terlalu lebar) */}
-          <div className="w-full sm:w-[320px] lg:w-[360px] shrink-0 flex flex-col gap-4">
+          <div
+            ref={sidebar.ref}
+            className="w-full sm:w-[320px] lg:w-[360px] shrink-0 flex flex-col gap-4"
+            style={fadeRight(sidebar.visible, 100)}
+          >
 
             {/* Status Strip */}
             <div className="bg-[#e8f5f0] border border-[#5dcaa5] rounded-xl px-4 py-3 flex items-center gap-2">
@@ -289,17 +380,12 @@ export default function Destinasi() {
                 ))}
                 <div className="flex gap-2 flex-wrap">
                   {["Teh herbal", "Asuransi", "Sertifikat"].map((tag) => (
-                    <span
-                      key={tag}
-                      className="bg-[#f0faf6] text-[#0f6e56] text-[11px] px-2.5 py-1 rounded-full"
-                    >
+                    <span key={tag} className="bg-[#f0faf6] text-[#0f6e56] text-[11px] px-2.5 py-1 rounded-full">
                       {tag}
                     </span>
                   ))}
                 </div>
-
                 <hr className="border-[#f3f4f6]" />
-
                 <div>
                   <label className="text-[#4b5563] text-[12px] block mb-1">Tanggal kunjungan</label>
                   <input
@@ -308,7 +394,6 @@ export default function Destinasi() {
                     className="w-full border border-[#d1d5db] rounded-lg px-3 py-2 text-[13px] text-[#111827] focus:outline-none focus:border-[#0f6e56]"
                   />
                 </div>
-
                 <div className="grid grid-cols-2 gap-3">
                   <div>
                     <label className="text-[#4b5563] text-[12px] block mb-1">Peserta</label>
@@ -329,7 +414,6 @@ export default function Destinasi() {
                     </div>
                   </div>
                 </div>
-
                 <button className="w-full bg-[#0f6e56] text-white text-[13px] py-2.5 rounded-lg hover:bg-[#085041] transition">
                   Booking Paket Ini
                 </button>
@@ -344,8 +428,8 @@ export default function Destinasi() {
               <p className="text-[#111827] text-[14px] font-medium mb-3">Paket lainnya</p>
               <div className="flex flex-col divide-y divide-[#f3f4f6]">
                 {[
-                  { name: "Forest Yoga", desc: "5 jam · maks. 12 orang", price: "Rp250k" },
-                  { name: "Overnight Camp", desc: "24 jam · maks. 10 orang", price: "Rp480k" },
+                  { name: "Forest Yoga",     desc: "5 jam · maks. 12 orang",  price: "Rp250k" },
+                  { name: "Overnight Camp",  desc: "24 jam · maks. 10 orang", price: "Rp480k" },
                 ].map((pkg) => (
                   <div key={pkg.name} className="flex items-center justify-between py-3">
                     <div>
