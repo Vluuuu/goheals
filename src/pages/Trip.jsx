@@ -52,6 +52,124 @@ const kategoriList = [
 
 const fasilitasList = ["Pemandu naturalis", "Teh herbal", "Makan siang", "Penginapan"]
 
+function FilterPanel({
+  activeDurasi, setActiveDurasi,
+  minHarga, setMinHarga,
+  maxHarga, setMaxHarga,
+  checkedKat, setCheckedKat,
+  activeKap, setActiveKap,
+  checkedFas, setCheckedFas,
+  toggleArr,
+}) {
+  return (
+    <div className="flex flex-col gap-5">
+
+      {/* Durasi */}
+      <div>
+        <p className="text-[#9ca3af] text-[11px] uppercase tracking-wider mb-3">Durasi</p>
+        <div className="flex flex-wrap gap-2">
+          {durasiChips.map((c) => (
+            <button key={c} onClick={() => toggleArr(activeDurasi, setActiveDurasi, c)}
+              className={`text-[12px] px-3 py-1 rounded-lg border transition ${
+                activeDurasi.includes(c)
+                  ? "bg-[#0f6e56] text-white border-[#0f6e56]"
+                  : "bg-white text-[#4b5563] border-[#d1d5db] hover:border-[#0f6e56]"
+              }`}
+            >{c}</button>
+          ))}
+        </div>
+      </div>
+
+      {/* Rentang Harga */}
+      <div>
+        <p className="text-[#9ca3af] text-[11px] uppercase tracking-wider mb-3">Rentang Harga</p>
+        <div className="flex justify-between mb-3">
+          <span className="text-[12px] text-[#0f6e56] font-medium">Rp{minHarga}k</span>
+          <span className="text-[12px] text-[#0f6e56] font-medium">Rp{maxHarga}k</span>
+        </div>
+        <div className="relative flex items-center" style={{ height: '20px' }}>
+          <div className="absolute w-full h-1.5 bg-[#e5e7eb] rounded-full" />
+          <div className="absolute h-1.5 bg-[#0f6e56] rounded-full pointer-events-none"
+            style={{
+              left:  `${((minHarga - 100) / 500) * 100}%`,
+              right: `${100 - ((maxHarga - 100) / 500) * 100}%`,
+            }}
+          />
+          <input type="range" min={100} max={600} value={minHarga}
+            onChange={(e) => { const v = Number(e.target.value); if (v < maxHarga - 50) setMinHarga(v) }}
+            className="thumb-min"
+          />
+          <input type="range" min={100} max={600} value={maxHarga}
+            onChange={(e) => { const v = Number(e.target.value); if (v > minHarga + 50) setMaxHarga(v) }}
+            className="thumb-max"
+          />
+        </div>
+        <div className="flex justify-between mt-2">
+          <span className="text-[11px] text-[#9ca3af]">Rp100k</span>
+          <span className="text-[11px] text-[#9ca3af]">Rp600k</span>
+        </div>
+      </div>
+
+      {/* Kategori Aktivitas */}
+      <div>
+        <p className="text-[#9ca3af] text-[11px] uppercase tracking-wider mb-3">Kategori Aktivitas</p>
+        <div className="flex flex-col gap-2">
+          {kategoriList.map((k) => (
+            <label key={k.label} className="flex items-center justify-between cursor-pointer">
+              <div className="flex items-center gap-2">
+                <input type="checkbox" checked={checkedKat.includes(k.label)}
+                  onChange={() => toggleArr(checkedKat, setCheckedKat, k.label)}
+                  className="accent-[#0f6e56] w-3.5 h-3.5"
+                />
+                <span className="text-[13px] text-[#111827]">{k.label}</span>
+              </div>
+              <span className="text-[11px] text-[#9ca3af]">{k.count}</span>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      {/* Kapasitas Grup */}
+      <div>
+        <p className="text-[#9ca3af] text-[11px] uppercase tracking-wider mb-3">Kapasitas Grup</p>
+        <div className="flex flex-wrap gap-2">
+          {kapasitasChips.map((c) => (
+            <button key={c} onClick={() => toggleArr(activeKap, setActiveKap, c)}
+              className={`text-[12px] px-3 py-1 rounded-lg border transition ${
+                activeKap.includes(c)
+                  ? "bg-[#0f6e56] text-white border-[#0f6e56]"
+                  : "bg-white text-[#4b5563] border-[#d1d5db] hover:border-[#0f6e56]"
+              }`}
+            >{c}</button>
+          ))}
+        </div>
+      </div>
+
+      {/* Fasilitas */}
+      <div>
+        <p className="text-[#9ca3af] text-[11px] uppercase tracking-wider mb-3">Fasilitas Termasuk</p>
+        <div className="flex flex-col gap-2">
+          {fasilitasList.map((f) => (
+            <label key={f} className="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" checked={checkedFas.includes(f)}
+                onChange={() => toggleArr(checkedFas, setCheckedFas, f)}
+                className="accent-[#0f6e56] w-3.5 h-3.5"
+              />
+              <span className="text-[13px] text-[#111827]">{f}</span>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      {/* Reset */}
+      <button className="text-[#4b5563] text-[13px] border border-[#d1d5db] rounded-lg py-1.5 hover:border-[#0f6e56] hover:text-[#0f6e56] transition">
+        Reset filter
+      </button>
+
+    </div>
+  )
+}
+
 export default function Trip() {
   const [activeFilter, setActiveFilter] = useState("Semua")
   const [activeDurasi, setActiveDurasi] = useState(["1–3 jam"])
@@ -98,107 +216,7 @@ export default function Trip() {
     transition: `opacity 650ms ease-out ${delay}ms, transform 650ms ease-out ${delay}ms`,
   })
 
-  // FilterPanel — dipakai di sidebar desktop & panel mobile
-  const FilterPanel = () => (
-    <div className="flex flex-col gap-5">
-
-      <div>
-        <p className="text-[#9ca3af] text-[11px] uppercase tracking-wider mb-3">Durasi</p>
-        <div className="flex flex-wrap gap-2">
-          {durasiChips.map((c) => (
-            <button key={c} onClick={() => toggleArr(activeDurasi, setActiveDurasi, c)}
-              className={`text-[12px] px-3 py-1 rounded-lg border transition ${
-                activeDurasi.includes(c)
-                  ? "bg-[#0f6e56] text-white border-[#0f6e56]"
-                  : "bg-white text-[#4b5563] border-[#d1d5db] hover:border-[#0f6e56]"
-              }`}
-            >{c}</button>
-          ))}
-        </div>
-      </div>
-
-      <div>
-        <p className="text-[#9ca3af] text-[11px] uppercase tracking-wider mb-3">Rentang Harga</p>
-        <div className="flex justify-between mb-3">
-          <span className="text-[12px] text-[#0f6e56] font-medium">Rp{minHarga}k</span>
-          <span className="text-[12px] text-[#0f6e56] font-medium">Rp{maxHarga}k</span>
-        </div>
-        <div className="relative flex items-center" style={{ height: '20px' }}>
-          <div className="absolute w-full h-1.5 bg-[#e5e7eb] rounded-full" />
-          <div className="absolute h-1.5 bg-[#0f6e56] rounded-full"
-            style={{
-              left:  `${((minHarga - 100) / 500) * 100}%`,
-              right: `${100 - ((maxHarga - 100) / 500) * 100}%`,
-            }}
-          />
-          <input type="range" min={100} max={600} value={minHarga}
-            onChange={(e) => { const v = Number(e.target.value); if (v < maxHarga - 50) setMinHarga(v) }}
-            className="thumb-min"
-          />
-          <input type="range" min={100} max={600} value={maxHarga}
-            onChange={(e) => { const v = Number(e.target.value); if (v > minHarga + 50) setMaxHarga(v) }}
-            className="thumb-max"
-          />
-        </div>
-        <div className="flex justify-between mt-2">
-          <span className="text-[11px] text-[#9ca3af]">Rp100k</span>
-          <span className="text-[11px] text-[#9ca3af]">Rp600k</span>
-        </div>
-      </div>
-
-      <div>
-        <p className="text-[#9ca3af] text-[11px] uppercase tracking-wider mb-3">Kategori Aktivitas</p>
-        <div className="flex flex-col gap-2">
-          {kategoriList.map((k) => (
-            <label key={k.label} className="flex items-center justify-between cursor-pointer">
-              <div className="flex items-center gap-2">
-                <input type="checkbox" checked={checkedKat.includes(k.label)}
-                  onChange={() => toggleArr(checkedKat, setCheckedKat, k.label)}
-                  className="accent-[#0f6e56] w-3.5 h-3.5"
-                />
-                <span className="text-[13px] text-[#111827]">{k.label}</span>
-              </div>
-              <span className="text-[11px] text-[#9ca3af]">{k.count}</span>
-            </label>
-          ))}
-        </div>
-      </div>
-
-      <div>
-        <p className="text-[#9ca3af] text-[11px] uppercase tracking-wider mb-3">Kapasitas Grup</p>
-        <div className="flex flex-wrap gap-2">
-          {kapasitasChips.map((c) => (
-            <button key={c} onClick={() => toggleArr(activeKap, setActiveKap, c)}
-              className={`text-[12px] px-3 py-1 rounded-lg border transition ${
-                activeKap.includes(c)
-                  ? "bg-[#0f6e56] text-white border-[#0f6e56]"
-                  : "bg-white text-[#4b5563] border-[#d1d5db] hover:border-[#0f6e56]"
-              }`}
-            >{c}</button>
-          ))}
-        </div>
-      </div>
-
-      <div>
-        <p className="text-[#9ca3af] text-[11px] uppercase tracking-wider mb-3">Fasilitas Termasuk</p>
-        <div className="flex flex-col gap-2">
-          {fasilitasList.map((f) => (
-            <label key={f} className="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" checked={checkedFas.includes(f)}
-                onChange={() => toggleArr(checkedFas, setCheckedFas, f)}
-                className="accent-[#0f6e56] w-3.5 h-3.5"
-              />
-              <span className="text-[13px] text-[#111827]">{f}</span>
-            </label>
-          ))}
-        </div>
-      </div>
-
-      <button className="text-[#4b5563] text-[13px] border border-[#d1d5db] rounded-lg py-1.5 hover:border-[#0f6e56] hover:text-[#0f6e56] transition">
-        Reset filter
-      </button>
-    </div>
-  )
+  
 
   return (
     <div className="bg-white min-h-screen">
@@ -285,7 +303,15 @@ export default function Trip() {
             className="hidden sm:flex w-[220px] shrink-0 border-r border-[#f3f4f6] px-5 py-5 flex-col gap-5"
             style={fadeLeft(sidebar.visible)}
           >
-            <FilterPanel />
+            <FilterPanel
+  activeDurasi={activeDurasi} setActiveDurasi={setActiveDurasi}
+  minHarga={minHarga} setMinHarga={setMinHarga}
+  maxHarga={maxHarga} setMaxHarga={setMaxHarga}
+  checkedKat={checkedKat} setCheckedKat={setCheckedKat}
+  activeKap={activeKap} setActiveKap={setActiveKap}
+  checkedFas={checkedFas} setCheckedFas={setCheckedFas}
+  toggleArr={toggleArr}
+/>
           </div>
 
           {/* ===== PACKAGE LIST ===== */}
@@ -312,7 +338,15 @@ export default function Trip() {
             {/* Panel filter mobile — collapsible */}
             <div className={`sm:hidden overflow-hidden transition-all duration-300 ${filterOpen ? 'max-h-[800px] mb-4' : 'max-h-0'}`}>
               <div className="border border-[#e5e7eb] rounded-xl p-4">
-                <FilterPanel />
+                <FilterPanel
+  activeDurasi={activeDurasi} setActiveDurasi={setActiveDurasi}
+  minHarga={minHarga} setMinHarga={setMinHarga}
+  maxHarga={maxHarga} setMaxHarga={setMaxHarga}
+  checkedKat={checkedKat} setCheckedKat={setCheckedKat}
+  activeKap={activeKap} setActiveKap={setActiveKap}
+  checkedFas={checkedFas} setCheckedFas={setCheckedFas}
+  toggleArr={toggleArr}
+/>
               </div>
             </div>
 
