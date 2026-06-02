@@ -443,9 +443,19 @@ export default function Trip() {
                           <button className="border border-[#d1d5db] text-[#4b5563] text-[12px] px-3 sm:px-4 py-1.5 rounded-lg hover:border-[#0f6e56] hover:text-[#0f6e56] transition">
                             Simpan
                           </button>
-                          <button className="bg-[#0f6e56] text-white text-[12px] px-3 sm:px-4 py-1.5 rounded-lg hover:bg-[#085041] transition">
-                            Booking
-                          </button>
+                            <button
+                              onClick={() => navigate('/pembayaran', {
+                                state: {
+                                  paket: pkg.name,
+                                  peserta: 1,
+                                  total: pkg.price.replace('Rp', '').replace('.', ''),
+                                  tanggal: "-",
+                                }
+                              })}
+                              className="bg-[#0f6e56] text-white text-[12px] px-4 py-1.5 rounded-lg hover:bg-[#085041] transition"
+                            >
+                              Booking
+                            </button>
                         </div>
                       </div>
 

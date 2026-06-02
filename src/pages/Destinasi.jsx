@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 import destMain from '../assets/div.dest-hero-main.png'
 import destSide1 from '../assets/div.dest-hero-side.png'
@@ -12,7 +13,9 @@ import gallery5 from '../assets/div.gallery-item5.png'
 import gallery6 from '../assets/div.gallery-item6.png'
 import { useScrollAnimation, useScrollAnimationGroup } from '../hooks/useScrollAnimation'
 
+
 const tabs = ["Profil", "Galeri", "Virtual Tour", "Paket Wisata", "Ulasan"]
+
 
 const reviews = [
   {
@@ -40,9 +43,13 @@ const ratingBars = [
   { star: "3★", pct: 7,  color: "#5dcaa5" },
 ]
 
+
+
 export default function Destinasi() {
+  const navigate = useNavigate()
+
   const [activeTab, setActiveTab] = useState("Profil")
-  const [peserta, setPeserta]     = useState(2)
+  const [peserta, setPeserta] = useState(2)
   const hargaSatuan = 185000
   const total = (hargaSatuan * peserta).toLocaleString("id-ID")
 
@@ -414,7 +421,17 @@ export default function Destinasi() {
                     </div>
                   </div>
                 </div>
-                <button className="w-full bg-[#0f6e56] text-white text-[13px] py-2.5 rounded-lg hover:bg-[#085041] transition">
+                <button
+                  onClick={() => navigate('/pembayaran', {
+                    state: {
+                      paket: "Forest Bathing Dasar",
+                      peserta: peserta,
+                      total: total,
+                      tanggal: "22 Mei 2025",
+                    }
+                  })}
+                  className="w-full bg-[#0f6e56] text-white text-[13px] py-2.5 rounded-lg hover:bg-[#085041] transition"
+                >
                   Booking Paket Ini
                 </button>
                 <p className="text-[#9ca3af] text-[11px] text-center">

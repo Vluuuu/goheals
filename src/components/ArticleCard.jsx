@@ -1,7 +1,7 @@
-export default function ArticleCard({ category, title, duration, date, image, emoji }) {
+export default function ArticleCard({ category, title, subtitle, duration, date, image, emoji, onClick }) {
   return (
     <div className="bg-white border border-[#d1d5db] rounded-xl overflow-hidden flex flex-col hover:shadow-md transition">
-
+      <div className="bg-white border ..." onClick={onClick}></div>
       {/* Gambar / Emoji */}
       <div className="h-[120px] relative overflow-hidden">
         {image ? (
