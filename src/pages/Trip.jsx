@@ -4,6 +4,7 @@ import tripForest from '../assets/trip-forestBathingDasar-div.pkg-img.png'
 import tripYoga from '../assets/trip-forest healing yoga-meditasi-div.pkg-img.png'
 import tripCamp from '../assets/trip-forestCamp-div.pkg-img.png'
 import { useScrollAnimation, useScrollAnimationGroup } from '../hooks/useScrollAnimation'
+import { useNavigate } from 'react-router-dom'
 
 const packages = [
   {
@@ -171,6 +172,7 @@ function FilterPanel({
 }
 
 export default function Trip() {
+  const navigate = useNavigate()
   const [activeFilter, setActiveFilter] = useState("Semua")
   const [activeDurasi, setActiveDurasi] = useState(["1–3 jam"])
   const [activeKap, setActiveKap]       = useState(["1–5", "6–15"])
