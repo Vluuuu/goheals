@@ -11,6 +11,7 @@ import gallery3 from '../assets/div.gallery-item3.png'
 import gallery4 from '../assets/div.gallery-item4.png'
 import gallery5 from '../assets/div.gallery-item5.png'
 import gallery6 from '../assets/div.gallery-item6.png'
+import vtourImg from '../assets/div.vtour-box.png'
 import { useScrollAnimation, useScrollAnimationGroup } from '../hooks/useScrollAnimation'
 
 
@@ -210,13 +211,16 @@ export default function Destinasi() {
               <h2 className="text-[#111827] text-[15px] font-medium mb-3 border-l-4 border-[#0f6e56] pl-2">
                 Virtual Tour 360°
               </h2>
-              <div className="bg-[#085041] rounded-lg h-[150px] sm:h-[164px] flex flex-col items-center justify-center gap-2 mb-3">
-                <div className="w-11 h-11 bg-white/20 rounded-full flex items-center justify-center">
-                  <span className="text-white text-xl">▶</span>
+                <div className="rounded-lg h-[150px] sm:h-[164px] overflow-hidden relative mb-3">
+                  <img src={vtourImg} alt="virtual tour" className="w-full h-full object-cover" />
+                  <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-black/20">
+                    <div className="w-11 h-11 bg-white/20 rounded-full flex items-center justify-center">
+                      <span className="text-white text-xl">▶</span>
+                    </div>
+                    <p className="text-white text-[13px]">Jelajahi Hutan Padusan</p>
+                    <p className="text-white/60 text-[11px]">Foto 360° interaktif</p>
+                  </div>
                 </div>
-                <p className="text-white text-[13px]">Jelajahi Hutan Padusan</p>
-                <p className="text-white/60 text-[11px]">Foto 360° interaktif — Pannellum.js</p>
-              </div>
               <div className="grid grid-cols-3 gap-2">
                 {["📍 Titik masuk", "🌲 Jalur meditasi", "🏕️ Area camp"].map((btn) => (
                   <button
